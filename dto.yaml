@@ -1,0 +1,166 @@
+PageListDTO:
+  discriminator: pageDescDTO
+  type: object
+  description: 分页描述
+  required:
+    - name
+    - pageDescDTO
+  properties:
+    offset:
+      type: integer
+      format: int32
+    limit:
+      type: integer
+      format: int32
+    count:
+      type: integer
+      format: int32
+    code:
+      type: string
+    message:
+      type: string
+    data:
+      type: string
+      
+
+UserBriefInfoDTO:
+  discriminator: userBriefInfoDTO
+  type: object
+  properties:
+    id:
+      type: string
+    creationTime:
+      type: integer
+      format: int64
+    name:
+      type: string
+    age:
+      type: string
+    job:
+      type: string
+    target:
+      type: string
+    height:
+      type: string
+    phone:
+      type: string
+    password:
+      type: string
+    role:
+      type: string
+    pid:
+      type: string
+    imgUri:
+      type: string
+
+UserInfoDTO:
+  allOf:
+    - $ref: '#/definitions/UserBriefInfoDTO'
+    - type: object
+      description: ...
+      properties:
+        bodyParams:
+          type: array
+          items:
+            $ref: '#/definitions/BodyParamDTO'
+
+BodyParamDTO:
+  type: object
+  properties:
+    id:
+      type: string
+    userId:
+      type: string
+    creationTime:
+      type: integer
+      format: int64
+    creatorId:
+      type: string
+    weight:
+      type: integer
+      format: int32
+    bust:
+      type: string
+    waistline:
+      type: string
+    hipline:
+      type: string
+    leftArm:
+      type: string
+    rightArm:
+      type: string
+    leftThigh:
+      type: string
+    rightThigh:
+      type: string
+    extraInfo:
+      type: string
+    imgUri:
+      type: string
+
+ClassRecordDTO:
+  discriminator: classRecordDTO
+  type: object
+  properties:
+    id:
+      type: string
+    userId:
+      type: string
+    creationTime:
+      type: integer
+      format: int64
+    creatorId:
+      type: string
+    startTime:
+      type: integer
+      format: int64
+    endTime:
+      type: integer
+      format: int64
+    target:
+      type: string
+    eatStatus:
+      type: string
+    bodyStatus:
+      type: string
+    sleepStatus:
+      type: string
+    briefInfo:
+      type: string
+    afterStatus:
+      type: string
+    review:
+      type: string
+    coachCheck:
+      type: string
+    userCheck:
+      type: string
+
+ClassRecordDetailDTO:
+  type: object
+  properties:
+    id:
+      type: string
+    classRecordId:
+      type: string
+    name:
+      type: string
+    strength:
+      type: string
+    times:
+      type: string
+    round:
+      type: string
+    extraInfo:
+      type: string
+
+ClassRecordWithDetailDTO:
+  allOf:
+    - $ref: '#/definitions/ClassRecordDTO'
+    - type: object
+      description: ...
+      properties:
+        details:
+          type: array
+          items:
+            $ref: '#/definitions/ClassRecordDetailDTO'

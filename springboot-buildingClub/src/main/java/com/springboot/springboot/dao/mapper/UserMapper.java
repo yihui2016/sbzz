@@ -2,25 +2,23 @@ package com.springboot.springboot.dao.mapper;
 
 import java.util.List;
 
-import org.apache.ibatis.annotations.Mapper;
-import org.springframework.stereotype.Component;
-
 import com.springboot.springboot.dao.model.User;
 
-@Component(value = "userMapper")
-@Mapper
 public interface UserMapper {
-	int deleteByPrimaryKey(String userId);
+    int deleteByPrimaryKey(String id);
 
-	int insert(User record);
+    int insert(User record);
 
-	int insertSelective(User record);
+    int insertSelective(User record);
 
-	User selectByPrimaryKey(String userId);
+    User selectByPrimaryKey(String id);
 
-	int updateByPrimaryKeySelective(User record);
+    int updateByPrimaryKeySelective(User record);
 
-	int updateByPrimaryKey(User record);
+    int updateByPrimaryKey(User record);
+    
+    List<User> listUsers();
+    
+    User selectByPhone(String phone);
 
-	List<User> selectAllUser();
 }

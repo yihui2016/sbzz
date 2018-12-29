@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.springboot.springboot.dao.mapper.BodyParamMapper" >
+  <resultMap id="BaseResultMap" type="com.springboot.springboot.dao.model.BodyParam" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="user_id" property="userId" jdbcType="VARCHAR" />
+    <result column="creation_time" property="creationTime" jdbcType="BIGINT" />
+    <result column="creator_id" property="creatorId" jdbcType="VARCHAR" />
+    <result column="weight" property="weight" jdbcType="INTEGER" />
+    <result column="bust" property="bust" jdbcType="VARCHAR" />
+    <result column="waistline" property="waistline" jdbcType="VARCHAR" />
+    <result column="hipline" property="hipline" jdbcType="VARCHAR" />
+    <result column="left_arm" property="leftArm" jdbcType="VARCHAR" />
+    <result column="right_arm" property="rightArm" jdbcType="VARCHAR" />
+    <result column="left_thigh" property="leftThigh" jdbcType="VARCHAR" />
+    <result column="right_thigh" property="rightThigh" jdbcType="VARCHAR" />
+    <result column="extra_info" property="extraInfo" jdbcType="VARCHAR" />
+    <result column="imgUri" property="imguri" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, user_id, creation_time, creator_id, weight, bust, waistline, hipline, left_arm, 
+    right_arm, left_thigh, right_thigh, extra_info, imgUri
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from body_param
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from body_param
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.springboot.springboot.dao.model.BodyParam" >
+    insert into body_param (id, user_id, creation_time, 
+      creator_id, weight, bust, 
+      waistline, hipline, left_arm, 
+      right_arm, left_thigh, right_thigh, 
+      extra_info, imgUri)
+    values (#{id,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR}, #{creationTime,jdbcType=BIGINT}, 
+      #{creatorId,jdbcType=VARCHAR}, #{weight,jdbcType=INTEGER}, #{bust,jdbcType=VARCHAR}, 
+      #{waistline,jdbcType=VARCHAR}, #{hipline,jdbcType=VARCHAR}, #{leftArm,jdbcType=VARCHAR}, 
+      #{rightArm,jdbcType=VARCHAR}, #{leftThigh,jdbcType=VARCHAR}, #{rightThigh,jdbcType=VARCHAR}, 
+      #{extraInfo,jdbcType=VARCHAR}, #{imguri,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.springboot.springboot.dao.model.BodyParam" >
+    insert into body_param
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="creationTime != null" >
+        creation_time,
+      </if>
+      <if test="creatorId != null" >
+        creator_id,
+      </if>
+      <if test="weight != null" >
+        weight,
+      </if>
+      <if test="bust != null" >
+        bust,
+      </if>
+      <if test="waistline != null" >
+        waistline,
+      </if>
+      <if test="hipline != null" >
+        hipline,
+      </if>
+      <if test="leftArm != null" >
+        left_arm,
+      </if>
+      <if test="rightArm != null" >
+        right_arm,
+      </if>
+      <if test="leftThigh != null" >
+        left_thigh,
+      </if>
+      <if test="rightThigh != null" >
+        right_thigh,
+      </if>
+      <if test="extraInfo != null" >
+        extra_info,
+      </if>
+      <if test="imguri != null" >
+        imgUri,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="creationTime != null" >
+        #{creationTime,jdbcType=BIGINT},
+      </if>
+      <if test="creatorId != null" >
+        #{creatorId,jdbcType=VARCHAR},
+      </if>
+      <if test="weight != null" >
+        #{weight,jdbcType=INTEGER},
+      </if>
+      <if test="bust != null" >
+        #{bust,jdbcType=VARCHAR},
+      </if>
+      <if test="waistline != null" >
+        #{waistline,jdbcType=VARCHAR},
+      </if>
+      <if test="hipline != null" >
+        #{hipline,jdbcType=VARCHAR},
+      </if>
+      <if test="leftArm != null" >
+        #{leftArm,jdbcType=VARCHAR},
+      </if>
+      <if test="rightArm != null" >
+        #{rightArm,jdbcType=VARCHAR},
+      </if>
+      <if test="leftThigh != null" >
+        #{leftThigh,jdbcType=VARCHAR},
+      </if>
+      <if test="rightThigh != null" >
+        #{rightThigh,jdbcType=VARCHAR},
+      </if>
+      <if test="extraInfo != null" >
+        #{extraInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="imguri != null" >
+        #{imguri,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.springboot.springboot.dao.model.BodyParam" >
+    update body_param
+    <set >
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="creationTime != null" >
+        creation_time = #{creationTime,jdbcType=BIGINT},
+      </if>
+      <if test="creatorId != null" >
+        creator_id = #{creatorId,jdbcType=VARCHAR},
+      </if>
+      <if test="weight != null" >
+        weight = #{weight,jdbcType=INTEGER},
+      </if>
+      <if test="bust != null" >
+        bust = #{bust,jdbcType=VARCHAR},
+      </if>
+      <if test="waistline != null" >
+        waistline = #{waistline,jdbcType=VARCHAR},
+      </if>
+      <if test="hipline != null" >
+        hipline = #{hipline,jdbcType=VARCHAR},
+      </if>
+      <if test="leftArm != null" >
+        left_arm = #{leftArm,jdbcType=VARCHAR},
+      </if>
+      <if test="rightArm != null" >
+        right_arm = #{rightArm,jdbcType=VARCHAR},
+      </if>
+      <if test="leftThigh != null" >
+        left_thigh = #{leftThigh,jdbcType=VARCHAR},
+      </if>
+      <if test="rightThigh != null" >
+        right_thigh = #{rightThigh,jdbcType=VARCHAR},
+      </if>
+      <if test="extraInfo != null" >
+        extra_info = #{extraInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="imguri != null" >
+        imgUri = #{imguri,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.springboot.springboot.dao.model.BodyParam" >
+    update body_param
+    set user_id = #{userId,jdbcType=VARCHAR},
+      creation_time = #{creationTime,jdbcType=BIGINT},
+      creator_id = #{creatorId,jdbcType=VARCHAR},
+      weight = #{weight,jdbcType=INTEGER},
+      bust = #{bust,jdbcType=VARCHAR},
+      waistline = #{waistline,jdbcType=VARCHAR},
+      hipline = #{hipline,jdbcType=VARCHAR},
+      left_arm = #{leftArm,jdbcType=VARCHAR},
+      right_arm = #{rightArm,jdbcType=VARCHAR},
+      left_thigh = #{leftThigh,jdbcType=VARCHAR},
+      right_thigh = #{rightThigh,jdbcType=VARCHAR},
+      extra_info = #{extraInfo,jdbcType=VARCHAR},
+      imgUri = #{imguri,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>
