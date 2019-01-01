@@ -21,4 +21,8 @@ public interface UserMapper {
     
     User selectByPhone(String phone);
 
+    List<User> selectByPid(String pid, Integer offset, Integer limit);
+
+    long countByPid(String pid);
+
 }

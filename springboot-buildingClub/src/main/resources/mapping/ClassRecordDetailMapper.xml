@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.springboot.springboot.dao.mapper.ClassRecordDatailMapper" >
-  <resultMap id="BaseResultMap" type="com.springboot.springboot.dao.model.ClassRecordDatail" >
+<mapper namespace="com.springboot.springboot.dao.mapper.ClassRecordDetailMapper" >
+  <resultMap id="BaseResultMap" type="com.springboot.springboot.dao.model.ClassRecordDetail" >
     <id column="id" property="id" jdbcType="VARCHAR" />
     <result column="class_record_id" property="classRecordId" jdbcType="VARCHAR" />
     <result column="name" property="name" jdbcType="VARCHAR" />
@@ -23,7 +23,7 @@
     delete from class_record_datail
     where id = #{id,jdbcType=VARCHAR}
   </delete>
-  <insert id="insert" parameterType="com.springboot.springboot.dao.model.ClassRecordDatail" >
+  <insert id="insert" parameterType="com.springboot.springboot.dao.model.ClassRecordDetail" >
     insert into class_record_datail (id, class_record_id, name, 
       strength, times, round, 
       extra_info)
@@ -31,7 +31,7 @@
       #{strength,jdbcType=VARCHAR}, #{times,jdbcType=VARCHAR}, #{round,jdbcType=VARCHAR}, 
       #{extraInfo,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.springboot.springboot.dao.model.ClassRecordDatail" >
+  <insert id="insertSelective" parameterType="com.springboot.springboot.dao.model.ClassRecordDetail" >
     insert into class_record_datail
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -80,7 +80,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.springboot.springboot.dao.model.ClassRecordDatail" >
+  <update id="updateByPrimaryKeySelective" parameterType="com.springboot.springboot.dao.model.ClassRecordDetail" >
     update class_record_datail
     <set >
       <if test="classRecordId != null" >
@@ -104,7 +104,7 @@
     </set>
     where id = #{id,jdbcType=VARCHAR}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.springboot.springboot.dao.model.ClassRecordDatail" >
+  <update id="updateByPrimaryKey" parameterType="com.springboot.springboot.dao.model.ClassRecordDetail" >
     update class_record_datail
     set class_record_id = #{classRecordId,jdbcType=VARCHAR},
       name = #{name,jdbcType=VARCHAR},

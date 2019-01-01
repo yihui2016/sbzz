@@ -10,11 +10,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.springboot.springboot.constant.ErrorCodeEnum;
+import com.springboot.springboot.dao.mapper.BodyParamMapper;
 import com.springboot.springboot.dao.mapper.UserMapper;
+import com.springboot.springboot.dao.model.BodyParam;
 import com.springboot.springboot.dao.model.User;
+import com.springboot.springboot.dto.BodyParamDTO;
+import com.springboot.springboot.dto.ListPagesDTO;
 import com.springboot.springboot.dto.ResponseDTO;
 import com.springboot.springboot.dto.SessionDTO;
+import com.springboot.springboot.dto.UserInfoDTO;
 import com.springboot.springboot.dto.UserLoginDTO;
+import com.springboot.springboot.dto.helper.UserDtoHelper;
 import com.springboot.springboot.service.UserService;
 import com.springboot.springboot.util.CommonUtil;
 
@@ -25,9 +31,18 @@ public class UserServiceImpl implements UserService {
 
 	@Resource
 	UserMapper userMapper;
+	@Resource
+	BodyParamMapper bodyParamMapper;
 	@Autowired
 	SessionBiz sessionBiz;
+	@Autowired
+	UserDtoHelper helper;
 
+	@Override
+	public List<User> listUsers() {
+		return userMapper.listUsers();
+	}
+	
 	@Override
 	public ResponseDTO<SessionDTO> userLogin(UserLoginDTO data, long requestTime) {
 		User user = userMapper.selectByPhone(data.getUniqueId());
@@ -47,44 +62,67 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public List<User> listUsers() {
-		return userMapper.listUsers();
+	public ResponseDTO<String> createUser(UserInfoDTO data, SessionDTO session) {
+		User model = helper.toModel(data);
+		String id = CommonUtil.getGenerateUUID();
+		model.setId(id);
+		model.setPid(session.getUserId());
+		model.setCreationTime(System.currentTimeMillis());
+		userMapper.insert(model);
+
+		List<BodyParamDTO> bodyParams = data.getBodyParams();
+		for (BodyParamDTO dto : bodyParams) {
+			BodyParam bodyParam = helper.toBodyParamModel(dto);
+			bodyParam.setId(CommonUtil.getGenerateUUID());
+			bodyParam.setCreationTime(System.currentTimeMillis());
+			bodyParam.setCreatorId(session.getUserId());
+			bodyParam.setUserId(id);
+			bodyParamMapper.insert(bodyParam);
+		}
+
+		return new ResponseDTO<>(id);
 	}
 
 	@Override
-	public int deleteById(String id) {
-		// TODO Auto-generated method stub
-		return 0;
+	public ResponseDTO<Long> getByPhone(String phone, SessionDTO session) {
+		User user = userMapper.selectByPhone(phone);
+		if(user == null){
+			return new ResponseDTO<>();
+		}
+		return new ResponseDTO<>(user.getCreationTime(), ErrorCodeEnum.RESOURCE_EXISTED);
 	}
 
 	@Override
-	public int insert(User record) {
-		// TODO Auto-generated method stub
-		return 0;
+	public ResponseDTO<UserInfoDTO> getById(String id, SessionDTO session) {
+		User user = userMapper.selectByPrimaryKey(id);
+		if (user == null) {
+			return new ResponseDTO<>(ErrorCodeEnum.NOT_FOUND);
+		}
+		UserInfoDTO r = helper.toDto(user);
+		return new ResponseDTO<>(r);
 	}
 
 	@Override
-	public int insertSelective(User record) {
-		// TODO Auto-generated method stub
-		return 0;
+	public ListPagesDTO<UserInfoDTO> listUsersByPid(SessionDTO session, Integer offset, Integer limit) {
+		List<User> users = userMapper.selectByPid(session.getUserId(), offset, limit);
+		long count = userMapper.countByPid(session.getUserId());
+		
+		List<UserInfoDTO> data = helper.toDtos(users);
+		ListPagesDTO<UserInfoDTO> r = new ListPagesDTO<>(data, count, offset, limit);
+		return r;
 	}
 
 	@Override
-	public User selectByPrimaryKey(String id) {
+	public ListPagesDTO<UserInfoDTO> listUsers(SessionDTO session, Integer offset, Integer limit) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public int updateByPrimaryKeySelective(User record) {
+	public ResponseDTO<String> updateUser(UserInfoDTO data, String id, SessionDTO session) {
 		// TODO Auto-generated method stub
-		return 0;
+		return null;
 	}
 
-	@Override
-	public int updateByPrimaryKey(User record) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
 
 }

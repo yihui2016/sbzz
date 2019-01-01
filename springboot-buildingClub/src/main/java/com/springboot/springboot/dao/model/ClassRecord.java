@@ -31,6 +31,8 @@ public class ClassRecord {
 
     private String userCheck;
 
+    private Boolean deleteFlag;
+
     public String getId() {
         return id;
     }
@@ -150,4 +152,12 @@ public class ClassRecord {
     public void setUserCheck(String userCheck) {
         this.userCheck = userCheck == null ? null : userCheck.trim();
     }
+
+	public Boolean getDeleteFlag() {
+		return deleteFlag;
+	}
+
+	public void setDeleteFlag(Boolean deleteFlag) {
+		this.deleteFlag = deleteFlag;
+	}
 }

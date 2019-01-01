@@ -1,17 +1,26 @@
 package com.springboot.springboot.dao.mapper;
 
+import java.util.List;
+
+import org.apache.ibatis.annotations.Param;
+
 import com.springboot.springboot.dao.model.ClassRecord;
 
 public interface ClassRecordMapper {
-    int deleteByPrimaryKey(String id);
+	int deleteByPrimaryKey(String id);
 
-    int insert(ClassRecord record);
+	int insert(ClassRecord record);
 
-    int insertSelective(ClassRecord record);
+	int insertSelective(ClassRecord record);
 
-    ClassRecord selectByPrimaryKey(String id);
+	ClassRecord selectByPrimaryKey(String id);
 
-    int updateByPrimaryKeySelective(ClassRecord record);
+	int updateByPrimaryKeySelective(ClassRecord record);
 
-    int updateByPrimaryKey(ClassRecord record);
+	int updateByPrimaryKey(ClassRecord record);
+
+	List<ClassRecord> selectByUserIdAndStartTimeAndEndTime(@Param("userId") String userId,
+			@Param("startTime") Long startTime, @Param("endTime") Long endTime);
+
+	List<ClassRecord> selectByUserId(String userId, Integer offset, Integer limit);
 }

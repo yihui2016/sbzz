@@ -22,7 +22,7 @@ public class ListPagesDTO<T> implements Serializable {
 	private Integer limit = null;
 
 	@JsonProperty("count")
-	private Integer count = null;
+	private Long count = null;
 
 	@JsonProperty("code")
 	private String code = null;
@@ -34,21 +34,21 @@ public class ListPagesDTO<T> implements Serializable {
 	private List<T> data = null;
 
 	public ListPagesDTO() {
-		this.code = "200";
+		this.code = "0";
 		this.message = "ok";
 	}
 
-	public ListPagesDTO(List<T> data, Integer count, Integer offset, Integer limit) {
+	public ListPagesDTO(List<T> data, Long count, Integer offset, Integer limit) {
 		super();
 		this.offset = offset;
 		this.limit = limit;
 		this.count = count;
-		this.code = "200";
+		this.code = "0";
 		this.message = "ok";
 		this.data = data;
 	}
 
-	public ListPagesDTO(Integer offset, Integer limit, Integer count, String code, String message, List<T> data) {
+	public ListPagesDTO(Integer offset, Integer limit, Long count, String code, String message, List<T> data) {
 		super();
 		this.offset = offset;
 		this.limit = limit;
@@ -96,7 +96,7 @@ public class ListPagesDTO<T> implements Serializable {
 		this.limit = limit;
 	}
 
-	public ListPagesDTO count(Integer count) {
+	public ListPagesDTO count(Long count) {
 		this.count = count;
 		return this;
 	}
@@ -107,11 +107,11 @@ public class ListPagesDTO<T> implements Serializable {
 	 * @return count
 	 **/
 
-	public Integer getCount() {
+	public Long getCount() {
 		return count;
 	}
 
-	public void setCount(Integer count) {
+	public void setCount(Long count) {
 		this.count = count;
 	}
 

@@ -4,12 +4,11 @@ public enum ErrorCodeEnum {
     // 系统
     SUCCESS("0", "成功"), ERROR("-1", "系统错误"),
     DEFINE_ERROR("-2", "自定义错误，根据返回对象值进行判断"),
-    UNAUTHORIZED("401", "未认证"), FORBIDDEN("403", "权限不够"),
+    UNAUTHORIZED("401", "未认证"), NO_ROLE("403", "权限不够"),
     IDENTIFY_CODE_ERROR("1001", "验证码错误"),
     IDENTIFY_CODE_EXPIRED("1002", "验证码过期"),
     NOT_FOUND("404", "未找到资源"),
     PARAMETER_WRONG("405", "参数有误"),
-	PARAMETER_LIMIT_WRONG("406", "limit超过最大值"),
     RESOURCE_EXISTED("201", "资源已存在"),
     NUMBER_EXCEED_LIMIT("1001", "数量超出规定限制"),
     PHONE_WRONG("1003", "手机号不正确"),

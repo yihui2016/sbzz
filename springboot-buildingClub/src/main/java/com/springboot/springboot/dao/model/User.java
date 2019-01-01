@@ -3,7 +3,7 @@ package com.springboot.springboot.dao.model;
 public class User {
     private String id;
 
-    private String creationTime;
+    private Long creationTime;
 
     private String name;
 
@@ -24,6 +24,8 @@ public class User {
     private String pid;
 
     private String imguri;
+    
+    private String extraInfo;
 
     public String getId() {
         return id;
@@ -33,12 +35,12 @@ public class User {
         this.id = id == null ? null : id.trim();
     }
 
-    public String getCreationTime() {
+    public Long getCreationTime() {
         return creationTime;
     }
 
-    public void setCreationTime(String creationTime) {
-        this.creationTime = creationTime == null ? null : creationTime.trim();
+    public void setCreationTime(Long creationTime) {
+        this.creationTime = creationTime == null ? null : creationTime;
     }
 
     public String getName() {
@@ -120,4 +122,12 @@ public class User {
     public void setImguri(String imguri) {
         this.imguri = imguri == null ? null : imguri.trim();
     }
+
+	public String getExtraInfo() {
+		return extraInfo;
+	}
+
+	public void setExtraInfo(String extraInfo) {
+		this.extraInfo = extraInfo;
+	}
 }

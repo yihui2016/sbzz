@@ -1,6 +1,6 @@
 package com.springboot.springboot.dao.model;
 
-public class ClassRecordDatail {
+public class ClassRecordDetail {
     private String id;
 
     private String classRecordId;
