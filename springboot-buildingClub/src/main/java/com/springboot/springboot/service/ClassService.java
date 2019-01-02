@@ -20,7 +20,10 @@ public interface ClassService {
 
 	// 查询用户课程大纲
 	ListPagesDTO<ClassRecordDTO> listClassRecords(SessionDTO session, String userId, Integer offset, Integer limit);
-	
+
+	// 查询用户课程大纲
+	ResponseDTO<ClassRecordWithDetailDTO> getClassRecord(SessionDTO session, String id);
+
 //	// 检查手机号是否创建过用户
 //	ResponseDTO<Long> getByPhone(String phone, SessionDTO session);
 //

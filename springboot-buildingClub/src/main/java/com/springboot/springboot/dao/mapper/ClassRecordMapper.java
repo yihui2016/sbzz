@@ -22,5 +22,8 @@ public interface ClassRecordMapper {
 	List<ClassRecord> selectByUserIdAndStartTimeAndEndTime(@Param("userId") String userId,
 			@Param("startTime") Long startTime, @Param("endTime") Long endTime);
 
-	List<ClassRecord> selectByUserId(String userId, Integer offset, Integer limit);
+	List<ClassRecord> selectByUserId(@Param("userId") String userId, @Param("offset") Integer offset,
+			@Param("limit") Integer limit);
+	
+	long countByUserId(@Param("userId") String userId);
 }

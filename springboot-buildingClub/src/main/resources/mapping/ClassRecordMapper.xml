@@ -21,9 +21,11 @@
 		<result column="user_check" property="userCheck" jdbcType="VARCHAR" />
 	</resultMap>
 	<sql id="Base_Column_List">
-		id, user_id, creation_time, creator_id, start_time, end_time, target,
+		id, user_id, creation_time, creator_id, start_time,
+		end_time, target,
 		eat_status,
-		body_status, sleep_status, brief_info, after_status, review, coach_check,
+		body_status, sleep_status, brief_info,
+		after_status, review, coach_check,
 		user_check
 	</sql>
 	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
@@ -50,24 +52,49 @@
 	</select>
 
 
+	<select id="selectByUserId" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from class_record
+		where user_id = #{userId,jdbcType=VARCHAR}
+		limit #{offset,jdbcType=INTEGER},
+		#{limit,jdbcType=INTEGER}
+	</select>
+
+	<select id="countByUserId" resultType="Long">
+		select
+		count(1)
+		from user
+		where user_id = #{userId,jdbcType=VARCHAR}
+	</select>
+
+
 	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
-		delete from class_record
+		delete from
+		class_record
 		where id = #{id,jdbcType=VARCHAR}
 	</delete>
 	<insert id="insert" parameterType="com.springboot.springboot.dao.model.ClassRecord">
-		insert into class_record (id, user_id, creation_time,
+		insert into class_record (id,
+		user_id, creation_time,
 		creator_id, start_time, end_time,
-		target, eat_status, body_status,
+		target,
+		eat_status, body_status,
 		sleep_status, brief_info, after_status,
 		review, coach_check, user_check
 		)
-		values (#{id,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR},
+		values (#{id,jdbcType=VARCHAR},
+		#{userId,jdbcType=VARCHAR},
 		#{creationTime,jdbcType=BIGINT},
-		#{creatorId,jdbcType=VARCHAR}, #{startTime,jdbcType=BIGINT}, #{endTime,jdbcType=BIGINT},
-		#{target,jdbcType=VARCHAR}, #{eatStatus,jdbcType=VARCHAR},
+		#{creatorId,jdbcType=VARCHAR}, #{startTime,jdbcType=BIGINT},
+		#{endTime,jdbcType=BIGINT},
+		#{target,jdbcType=VARCHAR},
+		#{eatStatus,jdbcType=VARCHAR},
 		#{bodyStatus,jdbcType=VARCHAR},
-		#{sleepStatus,jdbcType=VARCHAR}, #{briefInfo,jdbcType=VARCHAR}, #{afterStatus,jdbcType=VARCHAR},
-		#{review,jdbcType=VARCHAR}, #{coachCheck,jdbcType=VARCHAR},
+		#{sleepStatus,jdbcType=VARCHAR}, #{briefInfo,jdbcType=VARCHAR},
+		#{afterStatus,jdbcType=VARCHAR},
+		#{review,jdbcType=VARCHAR},
+		#{coachCheck,jdbcType=VARCHAR},
 		#{userCheck,jdbcType=VARCHAR}
 		)
 	</insert>
@@ -217,21 +244,31 @@
 		where id = #{id,jdbcType=VARCHAR}
 	</update>
 	<update id="updateByPrimaryKey" parameterType="com.springboot.springboot.dao.model.ClassRecord">
-		update class_record
+		update
+		class_record
 		set user_id = #{userId,jdbcType=VARCHAR},
-		creation_time = #{creationTime,jdbcType=BIGINT},
-		creator_id = #{creatorId,jdbcType=VARCHAR},
-		start_time = #{startTime,jdbcType=BIGINT},
+		creation_time =
+		#{creationTime,jdbcType=BIGINT},
+		creator_id =
+		#{creatorId,jdbcType=VARCHAR},
+		start_time =
+		#{startTime,jdbcType=BIGINT},
 		end_time = #{endTime,jdbcType=BIGINT},
 		target = #{target,jdbcType=VARCHAR},
-		eat_status = #{eatStatus,jdbcType=VARCHAR},
-		body_status = #{bodyStatus,jdbcType=VARCHAR},
-		sleep_status = #{sleepStatus,jdbcType=VARCHAR},
-		brief_info = #{briefInfo,jdbcType=VARCHAR},
-		after_status = #{afterStatus,jdbcType=VARCHAR},
+		eat_status =
+		#{eatStatus,jdbcType=VARCHAR},
+		body_status =
+		#{bodyStatus,jdbcType=VARCHAR},
+		sleep_status =
+		#{sleepStatus,jdbcType=VARCHAR},
+		brief_info =
+		#{briefInfo,jdbcType=VARCHAR},
+		after_status =
+		#{afterStatus,jdbcType=VARCHAR},
 		review = #{review,jdbcType=VARCHAR},
 		coach_check = #{coachCheck,jdbcType=VARCHAR},
-		user_check = #{userCheck,jdbcType=VARCHAR}
+		user_check =
+		#{userCheck,jdbcType=VARCHAR}
 		where id = #{id,jdbcType=VARCHAR}
 	</update>
 </mapper>

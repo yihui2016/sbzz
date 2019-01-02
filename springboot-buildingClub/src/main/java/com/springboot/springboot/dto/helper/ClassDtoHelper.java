@@ -3,13 +3,14 @@ package com.springboot.springboot.dto.helper;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.stereotype.Component;
+
 import com.springboot.springboot.dao.model.ClassRecord;
 import com.springboot.springboot.dao.model.ClassRecordDetail;
-import com.springboot.springboot.dao.model.User;
 import com.springboot.springboot.dto.ClassRecordDTO;
 import com.springboot.springboot.dto.ClassRecordDetailDTO;
-import com.springboot.springboot.dto.UserInfoDTO;
 
+@Component
 public class ClassDtoHelper {
 
 	public ClassRecord toModel(ClassRecordDTO dto) {
@@ -35,17 +36,40 @@ public class ClassDtoHelper {
 		return model;
 	}
 
-	public UserInfoDTO toDto(User model) {
-		return null;
+	public ClassRecordDTO toDto(ClassRecord model, ClassRecordDTO dto) {
+		if (model == null) {
+			return null;
+		}
+		dto.setAfterStatus(model.getAfterStatus());
+		dto.setBodyStatus(model.getBodyStatus());
+		dto.setBriefInfo(model.getBriefInfo());
+		dto.setCoachCheck(model.getCoachCheck());
+		dto.setCreationTime(model.getCreationTime());
+		dto.setCreatorId(model.getCreatorId());
+		dto.setEatStatus(model.getEatStatus());
+		dto.setEndTime(model.getEndTime());
+		dto.setId(model.getId());
+		dto.setReview(model.getReview());
+		dto.setSleepStatus(model.getSleepStatus());
+		dto.setStartTime(model.getStartTime());
+		dto.setTarget(model.getTarget());
+		dto.setUserCheck(model.getUserCheck());
+		dto.setUserId(model.getUserId());
+		return dto;
+	}
+	
+	public ClassRecordDTO toDto(ClassRecord model) {
+		ClassRecordDTO dto = new ClassRecordDTO();
+		return toDto(model, dto);
 	}
 
-	public List<UserInfoDTO> toDtos(List<User> models) {
-		List<UserInfoDTO> dtos = new ArrayList<>();
+	public List<ClassRecordDTO> toDtos(List<ClassRecord> models) {
+		List<ClassRecordDTO> dtos = new ArrayList<>();
 		if (models == null || models.isEmpty()) {
 			return dtos;
 		}
-		for (User user : models) {
-			dtos.add(toDto(user));
+		for (ClassRecord record : models) {
+			dtos.add(toDto(record));
 		}
 		return dtos;
 	}
@@ -63,6 +87,32 @@ public class ClassDtoHelper {
 		model.setStrength(dto.getStrength());
 		model.setTimes(dto.getTimes());
 		return model;
-	
+
+	}
+
+	public ClassRecordDetailDTO toDetailDto(ClassRecordDetail model) {
+		if (model == null) {
+			return null;
+		}
+		ClassRecordDetailDTO dto = new ClassRecordDetailDTO();
+		dto.setId(model.getId());
+		dto.setClassRecordId(model.getClassRecordId());
+		dto.setExtraInfo(model.getExtraInfo());
+		dto.setName(model.getName());
+		dto.setRound(model.getRound());
+		dto.setStrength(model.getStrength());
+		dto.setTimes(model.getTimes());
+		return dto;
+	}
+
+	public List<ClassRecordDetailDTO> toDetailDtos(List<ClassRecordDetail> models) {
+		List<ClassRecordDetailDTO> dtos = new ArrayList<>();
+		if (models == null || models.isEmpty()) {
+			return dtos;
+		}
+		for (ClassRecordDetail detail : models) {
+			dtos.add(toDetailDto(detail));
+		}
+		return dtos;
 	}
 }

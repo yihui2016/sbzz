@@ -91,7 +91,11 @@ public class ClassApiController implements ClassApi {
 	@Override
 	public ResponseEntity<Object> cClassIdGet(@NotNull @RequestParam(value = "token", required = true) String token,
 			@PathVariable("id") String id, @UserSession SessionDTO session) {
-		// TODO Auto-generated method stub
+		if (CommonUtil.isNullOrEmpty(id)) {
+			return new ResponseEntity<Object>(new ResponseDTO<>(ErrorCodeEnum.PARAMETER_WRONG), HttpStatus.OK);
+		}
+		
+		classService.getClassRecord(session, id);
 		return null;
 	}
 

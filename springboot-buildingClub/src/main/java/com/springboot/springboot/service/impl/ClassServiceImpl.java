@@ -74,7 +74,27 @@ public class ClassServiceImpl implements ClassService {
 	@Override
 	public ListPagesDTO<ClassRecordDTO> listClassRecords(SessionDTO session, String userId, Integer offset,
 			Integer limit) {
-		
+		List<ClassRecord> users = classRecordMapper.selectByUserId(userId, offset, limit);
+		long count = classRecordMapper.countByUserId(userId);
+
+		List<ClassRecordDTO> data = helper.toDtos(users);
+		ListPagesDTO<ClassRecordDTO> r = new ListPagesDTO<>(data, count, offset, limit);
+		return r;
+	}
+
+	@Override
+	public ResponseDTO<ClassRecordWithDetailDTO> getClassRecord(SessionDTO session, String id) {
+		ClassRecord record = classRecordMapper.selectByPrimaryKey(id);
+		if (record == null) {
+			return new ResponseDTO<>(ErrorCodeEnum.NOT_FOUND);
+		}
+		ClassRecordWithDetailDTO r = new ClassRecordWithDetailDTO();
+		helper.toDto(record, r);
+
+		List<ClassRecordDetail> details = classRecordDetailMapper.selectByClassRecordId(r.getId());
+		List<ClassRecordDetailDTO> detailDtos = helper.toDetailDtos(details);
+		r.setDetails(detailDtos);
+		return new ResponseDTO<>(r);
 	}
 
 }

@@ -3,11 +3,14 @@ package com.springboot.springboot.dto.helper;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.stereotype.Component;
+
 import com.springboot.springboot.dao.model.BodyParam;
 import com.springboot.springboot.dao.model.User;
 import com.springboot.springboot.dto.BodyParamDTO;
 import com.springboot.springboot.dto.UserInfoDTO;
 
+@Component
 public class UserDtoHelper {
 
 	public User toModel(UserInfoDTO dto) {
