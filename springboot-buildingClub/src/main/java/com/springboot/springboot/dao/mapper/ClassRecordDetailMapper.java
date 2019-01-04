@@ -2,6 +2,8 @@ package com.springboot.springboot.dao.mapper;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.springboot.springboot.dao.model.ClassRecordDetail;
 
 public interface ClassRecordDetailMapper {
@@ -18,5 +20,7 @@ public interface ClassRecordDetailMapper {
     int updateByPrimaryKey(ClassRecordDetail record);
     
     List<ClassRecordDetail> selectByClassRecordId(String classRecordId);
+
+    int deleteByRecordIdAndIdsNotIn(@Param("recordId")String recordId,@Param("ids") List<String> ids);
 
 }

@@ -15,6 +15,7 @@ import com.springboot.springboot.constant.AuthorityValue;
 import com.springboot.springboot.constant.ErrorCodeEnum;
 import com.springboot.springboot.controller.ClassApi;
 import com.springboot.springboot.dto.ClassRecordDTO;
+import com.springboot.springboot.dto.ClassRecordDetailDTO;
 import com.springboot.springboot.dto.ClassRecordWithDetailDTO;
 import com.springboot.springboot.dto.ListPagesDTO;
 import com.springboot.springboot.dto.ResponseDTO;
@@ -94,17 +95,92 @@ public class ClassApiController implements ClassApi {
 		if (CommonUtil.isNullOrEmpty(id)) {
 			return new ResponseEntity<Object>(new ResponseDTO<>(ErrorCodeEnum.PARAMETER_WRONG), HttpStatus.OK);
 		}
-		
-		classService.getClassRecord(session, id);
-		return null;
+
+		ResponseDTO<ClassRecordWithDetailDTO> r = classService.getClassRecord(session, id);
+		return new ResponseEntity<Object>(r, HttpStatus.OK);
 	}
 
 	@Override
 	public ResponseEntity<Object> cClassIdPut(@NotNull @RequestParam(value = "token", required = true) String token,
 			@PathVariable("id") String id, @RequestBody ClassRecordWithDetailDTO data,
 			@UserSession SessionDTO session) {
-		// TODO Auto-generated method stub
-		return null;
+		if (CommonUtil.isNullOrEmpty(id) || data == null) {
+			return new ResponseEntity<Object>(new ResponseDTO<>(ErrorCodeEnum.PARAMETER_WRONG), HttpStatus.OK);
+		}
+		ClassRecordWithDetailDTO oldVal = classService.getClassRecord(session, id).getData();
+		if (oldVal == null) {
+			return new ResponseEntity<Object>(new ResponseDTO<>(ErrorCodeEnum.NOT_FOUND), HttpStatus.OK);
+		}
+
+		// 一旦有被人确认过就不能再次修改
+		if (oldVal.getCoachCheck() != null || oldVal.getUserCheck() != null) {
+			return new ResponseEntity<Object>(new ResponseDTO<>(ErrorCodeEnum.PARAMETER_WRONG), HttpStatus.OK);
+		}
+
+		// 只有该课程的用户的pidUser才能修改
+		UserInfoDTO user = userService.getById(oldVal.getUserId(), session).getData();
+		if (user == null || !session.getUserId().equals(user.getPid())) {
+			return new ResponseEntity<Object>(new ResponseDTO<>(ErrorCodeEnum.NO_ROLE), HttpStatus.OK);
+		}
+		ResponseDTO<String> r = classService.updateClass(data, id, session);
+		return new ResponseEntity<Object>(r, HttpStatus.OK);
+	}
+
+	@Override
+	public ResponseEntity<Object> cClassIdDelete(@NotNull @RequestParam(value = "token", required = true) String token,
+			@PathVariable("id") String id, @UserSession SessionDTO session) {
+		if (CommonUtil.isNullOrEmpty(id)) {
+			return new ResponseEntity<Object>(new ResponseDTO<>(ErrorCodeEnum.PARAMETER_WRONG), HttpStatus.OK);
+		}
+		ClassRecordWithDetailDTO oldVal = classService.getClassRecord(session, id).getData();
+		if (oldVal == null) {
+			return new ResponseEntity<Object>(new ResponseDTO<>(ErrorCodeEnum.NOT_FOUND), HttpStatus.OK);
+		}
+
+		// 一旦有被人确认过就不能再次修改
+		if (oldVal.getStartTime() < System.currentTimeMillis() || oldVal.getCoachCheck() != null
+				|| oldVal.getUserCheck() != null) {
+			return new ResponseEntity<Object>(new ResponseDTO<>(ErrorCodeEnum.PARAMETER_WRONG), HttpStatus.OK);
+		}
+
+		// 只有该课程的用户的pidUser才能修改
+		UserInfoDTO user = userService.getById(oldVal.getUserId(), session).getData();
+		if (user == null || !session.getUserId().equals(user.getPid())) {
+			return new ResponseEntity<Object>(new ResponseDTO<>(ErrorCodeEnum.NO_ROLE), HttpStatus.OK);
+		}
+		ResponseDTO<String> r = classService.deleteClass(id, session);
+		return new ResponseEntity<Object>(r, HttpStatus.OK);
+	}
+
+	@Override
+	public ResponseEntity<Object> cClassDetailIdDelete(@NotNull @RequestParam(value = "token", required = true) String token,
+			@PathVariable("id") String id, @UserSession SessionDTO session) {
+		if (CommonUtil.isNullOrEmpty(id)) {
+			return new ResponseEntity<Object>(new ResponseDTO<>(ErrorCodeEnum.PARAMETER_WRONG), HttpStatus.OK);
+		}
+
+		ClassRecordDetailDTO detail = classService.getClassRecordDetail(session, id).getData();
+		if (detail == null) {
+			return new ResponseEntity<Object>(new ResponseDTO<>(ErrorCodeEnum.NOT_FOUND), HttpStatus.OK);
+		}
+		ClassRecordWithDetailDTO oldVal = classService.getClassRecord(session, detail.getClassRecordId()).getData();
+		if (oldVal == null) {
+			return new ResponseEntity<Object>(new ResponseDTO<>(ErrorCodeEnum.NOT_FOUND), HttpStatus.OK);
+		}
+
+		// 一旦有被人确认过就不能再次修改
+		if (oldVal.getStartTime() < System.currentTimeMillis() || oldVal.getCoachCheck() != null
+				|| oldVal.getUserCheck() != null) {
+			return new ResponseEntity<Object>(new ResponseDTO<>(ErrorCodeEnum.PARAMETER_WRONG), HttpStatus.OK);
+		}
+
+		// 只有该课程的用户的pidUser才能修改
+		UserInfoDTO user = userService.getById(oldVal.getUserId(), session).getData();
+		if (user == null || !session.getUserId().equals(user.getPid())) {
+			return new ResponseEntity<Object>(new ResponseDTO<>(ErrorCodeEnum.NO_ROLE), HttpStatus.OK);
+		}
+		ResponseDTO<String> r = classService.deleteClass(id, session);
+		return new ResponseEntity<Object>(r, HttpStatus.OK);
 	}
 
 }

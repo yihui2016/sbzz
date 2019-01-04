@@ -35,4 +35,14 @@ public interface ClassApi {
 	ResponseEntity<Object> cClassIdPut(@NotNull @RequestParam(value = "token", required = true) String token,
 			@PathVariable("id") String id, @RequestBody ClassRecordWithDetailDTO data, @UserSession SessionDTO session);
 
+	// 删除
+	@RequestMapping(value = "/c/class/{id}", produces = { "application/json" }, method = RequestMethod.DELETE)
+	ResponseEntity<Object> cClassIdDelete(@NotNull @RequestParam(value = "token", required = true) String token,
+			@PathVariable("id") String id, @UserSession SessionDTO session);
+
+	// 删除
+	@RequestMapping(value = "/c/class/detail/{id}", produces = { "application/json" }, method = RequestMethod.DELETE)
+	ResponseEntity<Object> cClassDetailIdDelete(@NotNull @RequestParam(value = "token", required = true) String token,
+			@PathVariable("id") String id, @UserSession SessionDTO session);
+
 }

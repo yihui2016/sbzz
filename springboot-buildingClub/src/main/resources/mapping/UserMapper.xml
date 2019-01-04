@@ -15,17 +15,20 @@
 		<result column="role" property="role" jdbcType="VARCHAR" />
 		<result column="pid" property="pid" jdbcType="VARCHAR" />
 		<result column="imgUri" property="imguri" jdbcType="VARCHAR" />
+		<result column="extra_info" property="extraInfo" jdbcType="VARCHAR" />
+		<result column="delete_flag" property="deleteFlag" jdbcType="TINYINT" />
 	</resultMap>
 	<sql id="Base_Column_List">
-		id, creation_time, name, age, job, target, height, password, phone, role,
-		pid, imgUri
+		id, creation_time, name, age, job, target, height,
+		password, phone, role,
+		pid, imgUri, extra_info, delete_flag
 	</sql>
 	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
 		parameterType="java.lang.String">
 		select
 		<include refid="Base_Column_List" />
 		from user
-		where id = #{id,jdbcType=VARCHAR}
+		where id = #{id,jdbcType=VARCHAR} and delete_flag = false
 	</select>
 
 	<select id="selectByPhone" resultMap="BaseResultMap"
@@ -33,46 +36,81 @@
 		select
 		<include refid="Base_Column_List" />
 		from user
-		where phone = #{phone,jdbcType=VARCHAR}
+		where phone = #{phone,jdbcType=VARCHAR} and delete_flag =
+		false
 	</select>
 
 	<select id="listUsers" resultMap="BaseResultMap">
 		select
 		<include refid="Base_Column_List" />
-		from user
+		from user where delete_flag = false
 	</select>
 
 	<select id="selectByPid" resultMap="BaseResultMap">
 		select
 		<include refid="Base_Column_List" />
 		from user
-		where pid = #{pid,jdbcType=VARCHAR}
-		limit #{offset,jdbcType=INTEGER},
-		#{limit,jdbcType=INTEGER}
+		where pid = #{pid,jdbcType=VARCHAR} and delete_flag = false
+		limit #{offset,jdbcType=INTEGER}, #{limit,jdbcType=INTEGER}
 	</select>
+
+    <select id="selectAllByPid" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from user
+        where pid = #{pid,jdbcType=VARCHAR} and delete_flag = false
+    </select>
 
 	<select id="countByPid" resultType="Long">
 		select
 		count(1)
 		from user
-		where pid = #{pid,jdbcType=VARCHAR}
+		where
+		pid = #{pid,jdbcType=VARCHAR} and delete_flag = false
 	</select>
 
-	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
-		delete from user
+	<select id="selectAll" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from user
+		limit #{offset,jdbcType=INTEGER}, #{limit,jdbcType=INTEGER}
+	</select>
+
+	<select id="countAll" resultType="Long">
+		select
+		count(1)
+		from user
+	</select>
+
+	<!-- <delete id="deleteByPrimaryKey" parameterType="java.lang.String"> delete 
+		from user where id = #{id,jdbcType=VARCHAR} </delete> -->
+
+	<update id="deleteByPrimaryKey" parameterType="java.lang.String">
+		update user
+		<set>
+			delete_flag = true
+		</set>
 		where id = #{id,jdbcType=VARCHAR}
-	</delete>
+	</update>
+
 	<insert id="insert" parameterType="com.springboot.springboot.dao.model.User">
-		insert into user (id, creation_time, name,
+		insert into user (id,
+		creation_time, name,
 		age, job, target, height,
 		password, phone, role,
-		pid, imgUri)
-		values (#{id,jdbcType=VARCHAR}, #{creationTime,jdbcType=VARCHAR},
+		pid, imgUri, extra_info, delete_flag)
+		values (#{id,jdbcType=VARCHAR},
+		#{creationTime,jdbcType=VARCHAR},
 		#{name,jdbcType=VARCHAR},
-		#{age,jdbcType=VARCHAR}, #{job,jdbcType=VARCHAR}, #{target,jdbcType=VARCHAR},
+		#{age,jdbcType=VARCHAR}, #{job,jdbcType=VARCHAR},
+		#{target,jdbcType=VARCHAR},
 		#{height,jdbcType=VARCHAR},
-		#{password,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, #{role,jdbcType=VARCHAR},
-		#{pid,jdbcType=VARCHAR}, #{imguri,jdbcType=VARCHAR})
+		#{password,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR},
+		#{role,jdbcType=VARCHAR},
+		#{pid,jdbcType=VARCHAR},
+		#{imguri,jdbcType=VARCHAR}),
+		#{extraInfo,jdbcType=VARCHAR}),
+		#{deleteFlag,jdbcType=TINYINT})
 	</insert>
 	<insert id="insertSelective" parameterType="com.springboot.springboot.dao.model.User">
 		insert into user
@@ -113,6 +151,12 @@
 			<if test="imguri != null">
 				imgUri,
 			</if>
+			<if test="extraInfo != null">
+				extra_info,
+			</if>
+			<if test="deleteFlag != null">
+				delete_flag,
+			</if>
 		</trim>
 		<trim prefix="values (" suffix=")" suffixOverrides=",">
 			<if test="id != null">
@@ -150,6 +194,12 @@
 			</if>
 			<if test="imguri != null">
 				#{imguri,jdbcType=VARCHAR},
+			</if>
+			<if test="extraInfo != null">
+				#{extraInfo,jdbcType=VARCHAR}),
+			</if>
+			<if test="deleteFlag != null">
+				#{deleteFlag,jdbcType=TINYINT})
 			</if>
 		</trim>
 	</insert>
@@ -189,22 +239,33 @@
 			<if test="imguri != null">
 				imgUri = #{imguri,jdbcType=VARCHAR},
 			</if>
+			<if test="extraInfo != null">
+				extra_info = #{extraInfo,jdbcType=VARCHAR}),
+			</if>
 		</set>
 		where id = #{id,jdbcType=VARCHAR}
 	</update>
 	<update id="updateByPrimaryKey" parameterType="com.springboot.springboot.dao.model.User">
 		update user
-		set creation_time = #{creationTime,jdbcType=VARCHAR},
-		name = #{name,jdbcType=VARCHAR},
+		set
+		creation_time = #{creationTime,jdbcType=VARCHAR},
+		name =
+		#{name,jdbcType=VARCHAR},
 		age = #{age,jdbcType=VARCHAR},
-		job = #{job,jdbcType=VARCHAR},
+		job =
+		#{job,jdbcType=VARCHAR},
 		target = #{target,jdbcType=VARCHAR},
-		height = #{height,jdbcType=VARCHAR},
+		height =
+		#{height,jdbcType=VARCHAR},
 		password = #{password,jdbcType=VARCHAR},
 		phone = #{phone,jdbcType=VARCHAR},
 		role = #{role,jdbcType=VARCHAR},
-		pid = #{pid,jdbcType=VARCHAR},
-		imgUri = #{imguri,jdbcType=VARCHAR}
-		where id = #{id,jdbcType=VARCHAR}
+		pid
+		= #{pid,jdbcType=VARCHAR},
+		imgUri = #{imguri,jdbcType=VARCHAR},
+		extra_info = #{extraInfo,jdbcType=VARCHAR}
+		where id
+		=
+		#{id,jdbcType=VARCHAR}
 	</update>
 </mapper>

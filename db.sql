@@ -11,7 +11,7 @@
  Target Server Version : 50717
  File Encoding         : 65001
 
- Date: 28/12/2018 14:51:41
+ Date: 04/01/2019 14:36:50
 */
 
 SET NAMES utf8mb4;
@@ -59,14 +59,15 @@ CREATE TABLE `class_record`  (
   `review` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `coach_check` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `user_check` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `delete_flag` tinyint(1) UNSIGNED ZEROFILL NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
--- Table structure for class_record_datail
+-- Table structure for class_record_detail
 -- ----------------------------
-DROP TABLE IF EXISTS `class_record_datail`;
-CREATE TABLE `class_record_datail`  (
+DROP TABLE IF EXISTS `class_record_detail`;
+CREATE TABLE `class_record_detail`  (
   `id` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `class_record_id` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
@@ -74,6 +75,7 @@ CREATE TABLE `class_record_datail`  (
   `times` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `round` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `extra_info` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `delete_flag` tinyint(1) UNSIGNED ZEROFILL NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
@@ -83,7 +85,7 @@ CREATE TABLE `class_record_datail`  (
 DROP TABLE IF EXISTS `user`;
 CREATE TABLE `user`  (
   `id` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `creation_time` bigint(16) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `creation_time` bigint(16) NOT NULL,
   `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `age` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `job` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
@@ -94,6 +96,7 @@ CREATE TABLE `user`  (
   `role` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `pid` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `imgUri` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `delete_flag` tinyint(1) UNSIGNED ZEROFILL NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 

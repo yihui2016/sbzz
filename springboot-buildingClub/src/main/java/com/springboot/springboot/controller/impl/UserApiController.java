@@ -93,11 +93,11 @@ public class UserApiController implements UserApi {
 			ListPagesDTO<UserInfoDTO> r = userService.listUsersByPid(session, offset, limit);
 			return new ResponseEntity<Object>(r, HttpStatus.OK);
 		}else if (AuthorityValue.ROLE7.equals(session.getRole()) || AuthorityValue.ROLE9.equals(session.getRole())){
-			
+			ListPagesDTO<UserInfoDTO> r = userService.listUsers(session, offset, limit);
+			return new ResponseEntity<Object>(r, HttpStatus.OK);
 		}else {
 			return new ResponseEntity<Object>(new ResponseDTO<>(ErrorCodeEnum.NO_ROLE), HttpStatus.OK);
 		}
-		return new ResponseEntity<Object>(new ResponseDTO<>(ErrorCodeEnum.NO_ROLE), HttpStatus.OK);
 	}
 
 	@Override
@@ -114,8 +114,14 @@ public class UserApiController implements UserApi {
 	@Override
 	public ResponseEntity<Object> uUserIdPut(@NotNull @RequestParam(value = "token", required = true) String token,
 			@PathVariable("id") String id, @RequestBody UserInfoDTO data, @UserSession SessionDTO session) {
-		if (CommonUtil.isNullOrEmpty(id) || data == null){
+		if (CommonUtil.isNullOrEmpty(id) || data == null || !AuthorityValue.ROLE5.equals(session.getRole())
+				|| !AuthorityValue.ROLE7.equals(session.getRole()) || !AuthorityValue.ROLE9.equals(session.getRole())) {
 			return new ResponseEntity<Object>(new ResponseDTO<>(ErrorCodeEnum.PARAMETER_WRONG), HttpStatus.OK);
+		}
+
+		UserInfoDTO user = userService.getById(id, session).getData();
+		if (user == null || !AuthorityValue.ROLE1.equals(user.getRole())) {
+			return new ResponseEntity<Object>(new ResponseDTO<>(ErrorCodeEnum.NOT_FOUND), HttpStatus.OK);
 		}
 
 		ResponseDTO<String> r = userService.updateUser(data, id, session);
@@ -124,9 +130,27 @@ public class UserApiController implements UserApi {
 
 	@Override
 	public ResponseEntity<Object> uUserIdDelete(@NotNull @RequestParam(value = "token", required = true) String token,
-			@PathVariable("id") String id, @UserSession SessionDTO session) {
-		// TODO Auto-generated method stub
-		return null;
+			@PathVariable("id") String id, @PathVariable("newId") String newId, @UserSession SessionDTO session) {
+		if (CommonUtil.isNullOrEmpty(id) || CommonUtil.isNullOrEmpty(newId) || id.equals(newId)) {
+			return new ResponseEntity<Object>(new ResponseDTO<>(ErrorCodeEnum.PARAMETER_WRONG), HttpStatus.OK);
+		}
+		// 只有店长才能删除 且删除的只能是role5 的
+		if (!AuthorityValue.ROLE7.equals(session.getRole()) && !AuthorityValue.ROLE9.equals(session.getRole())) {
+			return new ResponseEntity<Object>(new ResponseDTO<>(ErrorCodeEnum.NO_ROLE), HttpStatus.OK);
+		}
+
+		UserInfoDTO user = userService.getById(id, session).getData();
+		if (user == null || !AuthorityValue.ROLE5.equals(user.getRole())) {
+			return new ResponseEntity<Object>(new ResponseDTO<>(ErrorCodeEnum.NOT_FOUND), HttpStatus.OK);
+		}
+		
+		UserInfoDTO toUser = userService.getById(newId, session).getData();
+		if (toUser == null || !AuthorityValue.ROLE5.equals(toUser.getRole())) {
+			return new ResponseEntity<Object>(new ResponseDTO<>(ErrorCodeEnum.NOT_FOUND), HttpStatus.OK);
+		}
+
+		ResponseDTO<String> r = userService.deleteUser(session, id, newId);
+		return new ResponseEntity<Object>(r, HttpStatus.OK);
 	}
 
 }

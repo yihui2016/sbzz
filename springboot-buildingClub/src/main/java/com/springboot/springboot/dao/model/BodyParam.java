@@ -1,8 +1,6 @@
 package com.springboot.springboot.dao.model;
 
-public class BodyParam {
-    private String id;
-
+public class BodyParam  extends BaseBeanResource {
     private String userId;
 
     private Long creationTime;
@@ -28,14 +26,6 @@ public class BodyParam {
     private String extraInfo;
 
     private String imguri;
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id == null ? null : id.trim();
-    }
 
     public String getUserId() {
         return userId;

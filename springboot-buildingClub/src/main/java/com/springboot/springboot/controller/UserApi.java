@@ -43,6 +43,6 @@ public interface UserApi {
 	// 删除用户
 	@RequestMapping(value = "/u/user/{id}", produces = { "application/json" }, method = RequestMethod.DELETE)
 	ResponseEntity<Object> uUserIdDelete(@NotNull @RequestParam(value = "token", required = true) String token,
-			@PathVariable("id") String id, @UserSession SessionDTO session);
+			@PathVariable("id") String id, @PathVariable("newId") String newId, @UserSession SessionDTO session);
 
 }

@@ -26,4 +26,7 @@ public interface ClassRecordMapper {
 			@Param("limit") Integer limit);
 	
 	long countByUserId(@Param("userId") String userId);
+	
+//	int deleteById(String id);
+
 }

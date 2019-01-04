@@ -1,5 +1,7 @@
 package com.springboot.springboot.dao.mapper;
 
+import java.util.List;
+
 import com.springboot.springboot.dao.model.BodyParam;
 
 public interface BodyParamMapper {
@@ -14,4 +16,7 @@ public interface BodyParamMapper {
     int updateByPrimaryKeySelective(BodyParam record);
 
     int updateByPrimaryKey(BodyParam record);
+    
+    List<BodyParam> selectByUserId(String userId);
+
 }

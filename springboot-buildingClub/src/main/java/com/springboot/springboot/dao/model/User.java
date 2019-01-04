@@ -1,127 +1,119 @@
 package com.springboot.springboot.dao.model;
 
-public class User {
-    private String id;
+public class User extends BaseBeanResource {
+	private Long creationTime;
 
-    private Long creationTime;
+	private String name;
 
-    private String name;
+	private String age;
 
-    private String age;
+	private String job;
 
-    private String job;
+	private String target;
 
-    private String target;
+	private String height;
 
-    private String height;
+	private String password;
 
-    private String password;
+	private String phone;
 
-    private String phone;
+	private String role;
 
-    private String role;
+	private String pid;
 
-    private String pid;
+	private String imguri;
 
-    private String imguri;
-    
-    private String extraInfo;
+	private String extraInfo;
 
-    public String getId() {
-        return id;
-    }
+	private Boolean deleteFlag;
 
-    public void setId(String id) {
-        this.id = id == null ? null : id.trim();
-    }
+	public Long getCreationTime() {
+		return creationTime;
+	}
 
-    public Long getCreationTime() {
-        return creationTime;
-    }
+	public void setCreationTime(Long creationTime) {
+		this.creationTime = creationTime == null ? null : creationTime;
+	}
 
-    public void setCreationTime(Long creationTime) {
-        this.creationTime = creationTime == null ? null : creationTime;
-    }
+	public String getName() {
+		return name;
+	}
 
-    public String getName() {
-        return name;
-    }
+	public void setName(String name) {
+		this.name = name == null ? null : name.trim();
+	}
 
-    public void setName(String name) {
-        this.name = name == null ? null : name.trim();
-    }
+	public String getAge() {
+		return age;
+	}
 
-    public String getAge() {
-        return age;
-    }
+	public void setAge(String age) {
+		this.age = age == null ? null : age.trim();
+	}
 
-    public void setAge(String age) {
-        this.age = age == null ? null : age.trim();
-    }
+	public String getJob() {
+		return job;
+	}
 
-    public String getJob() {
-        return job;
-    }
+	public void setJob(String job) {
+		this.job = job == null ? null : job.trim();
+	}
 
-    public void setJob(String job) {
-        this.job = job == null ? null : job.trim();
-    }
+	public String getTarget() {
+		return target;
+	}
 
-    public String getTarget() {
-        return target;
-    }
+	public void setTarget(String target) {
+		this.target = target == null ? null : target.trim();
+	}
 
-    public void setTarget(String target) {
-        this.target = target == null ? null : target.trim();
-    }
+	public String getHeight() {
+		return height;
+	}
 
-    public String getHeight() {
-        return height;
-    }
+	public void setHeight(String height) {
+		this.height = height == null ? null : height.trim();
+	}
 
-    public void setHeight(String height) {
-        this.height = height == null ? null : height.trim();
-    }
+	public String getPassword() {
+		return password;
+	}
 
-    public String getPassword() {
-        return password;
-    }
+	public void setPassword(String password) {
+		this.password = password == null ? null : password.trim();
+	}
 
-    public void setPassword(String password) {
-        this.password = password == null ? null : password.trim();
-    }
+	public String getPhone() {
+		return phone;
+	}
 
-    public String getPhone() {
-        return phone;
-    }
+	public void setPhone(String phone) {
+		this.phone = phone == null ? null : phone.trim();
+	}
 
-    public void setPhone(String phone) {
-        this.phone = phone == null ? null : phone.trim();
-    }
+	public String getRole() {
+		return role;
+	}
 
-    public String getRole() {
-        return role;
-    }
+	public void setRole(String role) {
+		this.role = role == null ? null : role.trim();
+	}
 
-    public void setRole(String role) {
-        this.role = role == null ? null : role.trim();
-    }
+	public String getPid() {
+		return pid;
+	}
 
-    public String getPid() {
-        return pid;
-    }
+	public void setPid(String pid) {
+		this.pid = pid == null ? null : pid.trim();
+	}
 
-    public void setPid(String pid) {
-        this.pid = pid == null ? null : pid.trim();
-    }
+	public String getImguri() {
+		return imguri;
+	}
 
-    public String getImguri() {
-        return imguri;
-    }
-
-    public void setImguri(String imguri) {
-        this.imguri = imguri == null ? null : imguri.trim();
-    }
+	public void setImguri(String imguri) {
+		this.imguri = imguri == null ? null : imguri.trim();
+	}
 
 	public String getExtraInfo() {
 		return extraInfo;
@@ -129,5 +121,13 @@ public class User {
 
 	public void setExtraInfo(String extraInfo) {
 		this.extraInfo = extraInfo;
+	}
+
+	public Boolean getDeleteFlag() {
+		return deleteFlag;
+	}
+
+	public void setDeleteFlag(Boolean deleteFlag) {
+		this.deleteFlag = deleteFlag;
 	}
 }

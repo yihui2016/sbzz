@@ -25,6 +25,12 @@ public interface UserMapper {
 
 	List<User> selectByPid(@Param("pid") String pid, @Param("offset") Integer offset, @Param("limit") Integer limit);
 
+	List<User> selectAllByPid(@Param("pid") String pid);
+
 	long countByPid(@Param("pid") String pid);
+
+	List<User> selectAll(@Param("offset") Integer offset, @Param("limit") Integer limit);
+
+	long countAll();
 
 }

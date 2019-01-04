@@ -1,45 +1,46 @@
 package com.springboot.springboot.dao.model;
 
-public class ClassRecord {
-    private String id;
-
+public class ClassRecord  extends BaseBeanResource{
     private String userId;
 
     private Long creationTime;
 
     private String creatorId;
 
+    @AcceptNewValue
     private Long startTime;
 
+    @AcceptNewValue
     private Long endTime;
 
+    @AcceptNewValue
     private String target;
 
+    @AcceptNewValue
     private String eatStatus;
 
+    @AcceptNewValue
     private String bodyStatus;
 
+    @AcceptNewValue
     private String sleepStatus;
 
+    @AcceptNewValue
     private String briefInfo;
 
+    @AcceptNewValue
     private String afterStatus;
 
+    @AcceptNewValue
     private String review;
 
+    @AcceptNewValue
     private String coachCheck;
 
+    @AcceptNewValue
     private String userCheck;
 
     private Boolean deleteFlag;
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id == null ? null : id.trim();
-    }
 
     public String getUserId() {
         return userId;

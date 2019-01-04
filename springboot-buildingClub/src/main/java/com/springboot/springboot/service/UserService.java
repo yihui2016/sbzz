@@ -43,4 +43,6 @@ public interface UserService {
 
 	ResponseDTO<String> updateUser(UserInfoDTO data, String id, SessionDTO session);
 
+	ResponseDTO<String> deleteUser(SessionDTO session, String id, String newId);
+
 }

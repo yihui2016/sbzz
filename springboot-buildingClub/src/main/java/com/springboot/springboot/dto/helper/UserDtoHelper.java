@@ -67,10 +67,10 @@ public class UserDtoHelper {
 			return null;
 		}
 		BodyParam model = new BodyParam();
-//		model.setCreationTime(creationTime);
-//		model.setCreatorId(creatorId);
-//		model.setUserId(userId);
-//		model.setId(dto.getId());
+		model.setCreationTime(dto.getCreationTime());
+		model.setCreatorId(dto.getCreatorId());
+		model.setUserId(dto.getUserId());
+		model.setId(dto.getId());
 		model.setBust(dto.getBust());
 		model.setExtraInfo(dto.getExtraInfo());
 		model.setHipline(dto.getHipline());
@@ -82,5 +82,38 @@ public class UserDtoHelper {
 		model.setWaistline(dto.getWaistline());
 		model.setWeight(dto.getWeight());
 		return model;
+	}
+	
+	public BodyParamDTO toBodyParamDto(BodyParam model) {
+		if (model == null) {
+			return null;
+		}
+		BodyParamDTO dto = new BodyParamDTO();
+		dto.setCreationTime(model.getCreationTime());
+		dto.setCreatorId(model.getCreatorId());
+		dto.setUserId(model.getUserId());
+		dto.setId(model.getId());
+		dto.setBust(model.getBust());
+		dto.setExtraInfo(model.getExtraInfo());
+		dto.setHipline(model.getHipline());
+		dto.setImgUri(model.getImguri());
+		dto.setLeftArm(model.getLeftArm());
+		dto.setLeftThigh(model.getLeftThigh());
+		dto.setRightArm(model.getRightArm());
+		dto.setRightThigh(model.getRightThigh());
+		dto.setWaistline(model.getWaistline());
+		dto.setWeight(model.getWeight());
+		return dto;
+	}
+	
+	public List<BodyParamDTO> toBodyParamDtos(List<BodyParam> models) {
+		List<BodyParamDTO> dtos = new ArrayList<>();
+		if (models == null || models.isEmpty()) {
+			return dtos;
+		}
+		for (BodyParam user : models) {
+			dtos.add(toBodyParamDto(user));
+		}
+		return dtos;
 	}
 }

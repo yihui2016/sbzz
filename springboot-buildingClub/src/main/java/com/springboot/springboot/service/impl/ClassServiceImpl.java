@@ -1,5 +1,6 @@
 package com.springboot.springboot.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -61,9 +62,13 @@ public class ClassServiceImpl implements ClassService {
 
 		// 具体条目
 		List<ClassRecordDetailDTO> details = data.getDetails();
+		if (details == null || details.isEmpty()) {
+			return new ResponseDTO<>(classId);
+		}
 		for (ClassRecordDetailDTO dto : details) {
 			ClassRecordDetail detail = helper.toDetailModel(dto);
 			detail.setClassRecordId(classId);
+			detail.setDeleteFlag(false);
 			detail.setId(CommonUtil.getGenerateUUID());
 			classRecordDetailMapper.insert(detail);
 		}
@@ -95,6 +100,71 @@ public class ClassServiceImpl implements ClassService {
 		List<ClassRecordDetailDTO> detailDtos = helper.toDetailDtos(details);
 		r.setDetails(detailDtos);
 		return new ResponseDTO<>(r);
+	}
+
+	@Override
+	public ResponseDTO<String> updateClass(ClassRecordWithDetailDTO data, String id, SessionDTO session) {
+		ClassRecord oldValRecord = classRecordMapper.selectByPrimaryKey(id);
+
+		ClassRecord newValRecord = helper.toModel(data);
+
+		try {
+			oldValRecord.updateWithNewValue(newValRecord);
+		} catch (Exception e) {
+			logger.error("updateClass  updateWithNewValue", e);
+		}
+		oldValRecord.setDeleteFlag(null);
+		classRecordMapper.updateByPrimaryKey(oldValRecord);
+
+		// 具体条目
+		List<ClassRecordDetailDTO> details = data.getDetails();
+		if (details == null || details.isEmpty()) {
+			return new ResponseDTO<>(id);
+		}
+		List<String> remaindetailIds = new ArrayList<>();
+		for (ClassRecordDetailDTO dto : details) {
+			ClassRecordDetail detail = helper.toDetailModel(dto);
+			if (CommonUtil.isNullOrEmpty(detail.getId())) {
+				detail.setClassRecordId(id);
+				detail.setDeleteFlag(false);
+				detail.setId(CommonUtil.getGenerateUUID());
+				classRecordDetailMapper.insert(detail);
+			} else {
+				remaindetailIds.add(detail.getId());
+
+				ClassRecordDetail oldDetailVal = classRecordDetailMapper.selectByPrimaryKey(detail.getId());
+				try {
+					oldDetailVal.updateWithNewValue(detail);
+				} catch (Exception e) {
+					logger.error("updateClass  updateWithNewValue", e);
+				}
+				classRecordDetailMapper.updateByPrimaryKey(oldDetailVal);
+			}
+		}
+
+		// 修改所有没有提到的详情为删除
+		classRecordDetailMapper.deleteByRecordIdAndIdsNotIn(id, remaindetailIds);
+
+		return new ResponseDTO<>(id);
+	}
+
+	@Override
+	public ResponseDTO<String> deleteClass(String id, SessionDTO session) {
+		classRecordMapper.deleteByPrimaryKey(id);
+		return new ResponseDTO<>(id);
+	}
+
+	@Override
+	public ResponseDTO<ClassRecordDetailDTO> getClassRecordDetail(SessionDTO session, String id) {
+		ClassRecordDetail selectByPrimaryKey = classRecordDetailMapper.selectByPrimaryKey(id);
+		ClassRecordDetailDTO r = helper.toDetailDto(selectByPrimaryKey);
+		return new ResponseDTO<>(r);
+	}
+
+	@Override
+	public ResponseDTO<String> deleteClassRecordDetail(String id, SessionDTO session) {
+		classRecordDetailMapper.deleteByPrimaryKey(id);
+		return new ResponseDTO<>(id);
 	}
 
 }
