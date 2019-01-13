@@ -62,7 +62,10 @@ public class UserApiController implements UserApi {
 				|| CommonUtil.isNullOrEmpty(data.getPassword())) {
 			return new ResponseEntity<Object>(new ResponseDTO<>(ErrorCodeEnum.PARAMETER_WRONG), HttpStatus.OK);
 		}
-		if (AuthorityValue.ROLE7.equals(session.getRole())) {
+		System.out.println(session);
+		if (AuthorityValue.ROLE9.equals(session.getRole())) {
+			data.setRole(AuthorityValue.ROLE7);
+		} else if (AuthorityValue.ROLE7.equals(session.getRole())) {
 			// 店长新建教练
 			data.setRole(AuthorityValue.ROLE5);
 		} else if (AuthorityValue.ROLE5.equals(session.getRole())) {
@@ -131,7 +134,7 @@ public class UserApiController implements UserApi {
 	@Override
 	public ResponseEntity<Object> uUserIdDelete(@NotNull @RequestParam(value = "token", required = true) String token,
 			@PathVariable("id") String id, @PathVariable("newId") String newId, @UserSession SessionDTO session) {
-		if (CommonUtil.isNullOrEmpty(id) || CommonUtil.isNullOrEmpty(newId) || id.equals(newId)) {
+		if (CommonUtil.isNullOrEmpty(id)) {
 			return new ResponseEntity<Object>(new ResponseDTO<>(ErrorCodeEnum.PARAMETER_WRONG), HttpStatus.OK);
 		}
 		// 只有店长才能删除 且删除的只能是role5 的
@@ -140,8 +143,12 @@ public class UserApiController implements UserApi {
 		}
 
 		UserInfoDTO user = userService.getById(id, session).getData();
-		if (user == null || !AuthorityValue.ROLE5.equals(user.getRole())) {
+		if (user == null || !AuthorityValue.ROLE5.equals(user.getRole()) || !AuthorityValue.ROLE1.equals(user.getRole())) {
 			return new ResponseEntity<Object>(new ResponseDTO<>(ErrorCodeEnum.NOT_FOUND), HttpStatus.OK);
+		}
+		
+		if (AuthorityValue.ROLE5.equals(user.getRole()) && (CommonUtil.isNullOrEmpty(newId) || id.equals(newId))) {
+			return new ResponseEntity<Object>(new ResponseDTO<>(ErrorCodeEnum.PARAMETER_WRONG), HttpStatus.OK);
 		}
 		
 		UserInfoDTO toUser = userService.getById(newId, session).getData();

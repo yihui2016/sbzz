@@ -97,7 +97,16 @@ CREATE TABLE `user`  (
   `pid` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `imgUri` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `delete_flag` tinyint(1) UNSIGNED ZEROFILL NOT NULL DEFAULT 0,
+  `extra_info` varchar(255) UNSIGNED ZEROFILL NOT NULL DEFAULT 0,
+  `sex` varchar(1) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `no` int(8) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 SET FOREIGN_KEY_CHECKS = 1;
+
+
+
+
+
+INSERT INTO `buildingclub`.`user` (`id`, `creation_time`, `name`, `age`, `job`, `target`, `height`, `password`, `phone`, `role`, `pid`, `imgUri`, `delete_flag`) VALUES ('1', '1', 'admin', '1', '1', '1', '1', 'e10adc3949ba59abbe56e057f20f883e', '9', '1', '1', '1', false);

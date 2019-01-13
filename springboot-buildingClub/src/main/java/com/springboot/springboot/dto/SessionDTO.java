@@ -6,6 +6,7 @@ public class SessionDTO implements Serializable {
 	private static final long serialVersionUID = -2437186301461673321L;
 	private String token = null;
 	private String userId = null;
+	private String name = null;
 	private String role = null;
 	private String pId = null;
 
@@ -41,9 +42,17 @@ public class SessionDTO implements Serializable {
 		this.pId = pId;
 	}
 
-	@Override
-	public String toString() {
-		return "SessionDTO [token=" + token + ", userId=" + userId + ", role=" + role + ", pId=" + pId + "]";
+	public String getName() {
+		return name;
 	}
 
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	@Override
+	public String toString() {
+		return "SessionDTO [token=" + token + ", userId=" + userId + ", name=" + name + ", role=" + role + ", pId="
+				+ pId + "]";
+	}
 }

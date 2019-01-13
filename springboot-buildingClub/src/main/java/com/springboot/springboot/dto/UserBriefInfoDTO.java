@@ -59,6 +59,12 @@ public class UserBriefInfoDTO implements Serializable{
   @JsonProperty("imgUri")
   private String imgUri = null;
 
+  @JsonProperty("sex")
+  private String sex = null;
+
+  @JsonProperty("no")
+  private Integer no = null;
+
   public UserBriefInfoDTO id(String id) {
     this.id = id;
     return this;
@@ -284,7 +290,24 @@ public class UserBriefInfoDTO implements Serializable{
     return this;
   }
 
-  /**
+  
+  public String getSex() {
+	return sex;
+}
+
+public void setSex(String sex) {
+	this.sex = sex;
+}
+
+public Integer getNo() {
+	return no;
+}
+
+public void setNo(Integer no) {
+	this.no = no;
+}
+
+/**
    * Get imgUri
    * @return imgUri
   **/

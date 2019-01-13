@@ -52,7 +52,9 @@ public class UserServiceImpl implements UserService {
 		}
 
 		String md5 = CommonUtil.getMD5(user.getPassword() + requestTime);
-		if (!md5.equals(data.getPassword())) {
+		if (!user.getPassword().equals(data.getPassword())) {
+			System.out.println(md5);
+			System.out.println(data.getPassword());
 			return new ResponseDTO<>(ErrorCodeEnum.LOGIN_PASSWORD_ERROR);
 		}
 		// 验证通过
@@ -70,7 +72,8 @@ public class UserServiceImpl implements UserService {
 		model.setPid(session.getUserId());
 		model.setCreationTime(System.currentTimeMillis());
 		model.setDeleteFlag(false);
-		userMapper.insert(model);
+		
+		userMapper.insertSelective(model);
 
 		addBodyParam(data, id, session);
 

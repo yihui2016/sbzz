@@ -37,6 +37,7 @@ public class SessionBiz {
 		d.setRole(user.getRole());
 		d.setpId(user.getPid());
 		d.setToken(token);
+		d.setName(user.getName());
 		addToken2Redis(token, d, timeoutHours);
 		return d;
 	}

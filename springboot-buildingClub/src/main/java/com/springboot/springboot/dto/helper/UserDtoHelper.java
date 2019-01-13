@@ -27,6 +27,9 @@ public class UserDtoHelper {
 		model.setPhone(dto.getPhone());
 		model.setRole(dto.getRole());
 		model.setTarget(dto.getTarget());
+		model.setPid(dto.getPid());
+		model.setSex(dto.getSex());
+		model.setNo(model.getNo());
 		return model;
 	}
 
@@ -47,6 +50,9 @@ public class UserDtoHelper {
 		dto.setRole(model.getRole());
 		dto.setTarget(model.getTarget());
 		dto.setPid(model.getPid());
+		dto.setPid(model.getPid());
+		dto.setSex(model.getSex());
+		dto.setNo(model.getNo());
 		return dto;
 	}
 

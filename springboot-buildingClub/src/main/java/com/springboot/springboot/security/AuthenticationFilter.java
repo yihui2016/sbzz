@@ -40,6 +40,7 @@ public class AuthenticationFilter extends GenericFilterBean {
         String resourcePath = new UrlPathHelper().getPathWithinApplication(httpRequest);
         try {
             if (resourcePath.contains("/u/users/login") 
+            		|| resourcePath.contains("/hello") 
 //            		||
 //                    resourcePath.contains("/u/wxlogin") ||
 //                    resourcePath.contains("/public") ||

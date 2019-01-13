@@ -27,6 +27,10 @@ public class User extends BaseBeanResource {
 
 	private Boolean deleteFlag;
 
+	private String sex;
+	
+	private Integer no;
+
 	public Long getCreationTime() {
 		return creationTime;
 	}
@@ -129,5 +133,21 @@ public class User extends BaseBeanResource {
 
 	public void setDeleteFlag(Boolean deleteFlag) {
 		this.deleteFlag = deleteFlag;
+	}
+
+	public String getSex() {
+		return sex;
+	}
+
+	public void setSex(String sex) {
+		this.sex = sex;
+	}
+
+	public Integer getNo() {
+		return no;
+	}
+
+	public void setNo(Integer no) {
+		this.no = no;
 	}
 }
