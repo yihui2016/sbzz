@@ -1,5 +1,6 @@
 package com.springboot.springboot.controller;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.NotNull;
 
 import org.springframework.http.ResponseEntity;
@@ -45,4 +46,7 @@ public interface UserApi {
 	ResponseEntity<Object> uUserIdDelete(@NotNull @RequestParam(value = "token", required = true) String token,
 			@PathVariable("id") String id, @PathVariable("newId") String newId, @UserSession SessionDTO session);
 
+	// 图片上传
+	@RequestMapping(value = "/u/users/image", produces = { "application/json" }, method = RequestMethod.POST)
+	ResponseEntity<Object> uUsersImagePost(@RequestBody UserInfoDTO data, HttpServletRequest request);
 }

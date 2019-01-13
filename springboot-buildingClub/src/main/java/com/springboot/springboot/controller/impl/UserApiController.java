@@ -2,6 +2,7 @@ package com.springboot.springboot.controller.impl;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.NotNull;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -160,4 +161,12 @@ public class UserApiController implements UserApi {
 		return new ResponseEntity<Object>(r, HttpStatus.OK);
 	}
 
+	@Override
+	public ResponseEntity<Object> uUsersImagePost(@RequestBody UserInfoDTO data, HttpServletRequest request) {
+		if (data == null || CommonUtil.isNullOrEmpty(data.getImgUri())) {
+			return new ResponseEntity<Object>(new ResponseDTO<>(ErrorCodeEnum.PARAMETER_WRONG), HttpStatus.OK);
+		}
+		ResponseDTO<String> r = userService.postUserImage(data.getImgUri());
+		return new ResponseEntity<Object>(r, HttpStatus.OK);
+	}
 }

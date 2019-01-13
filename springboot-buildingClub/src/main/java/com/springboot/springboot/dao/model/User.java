@@ -14,7 +14,7 @@ public class User extends BaseBeanResource {
 	private String height;
 
 	private String password;
-
+    @AcceptNewValue
 	private String phone;
 
 	private String role;

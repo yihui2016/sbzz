@@ -41,6 +41,7 @@ public class AuthenticationFilter extends GenericFilterBean {
         try {
             if (resourcePath.contains("/u/users/login") 
             		|| resourcePath.contains("/hello") 
+            		|| resourcePath.contains("/u/users/image") 
 //            		||
 //                    resourcePath.contains("/u/wxlogin") ||
 //                    resourcePath.contains("/public") ||

@@ -2,8 +2,6 @@ package com.springboot.springboot.service;
 
 import java.util.List;
 
-import org.springframework.stereotype.Service;
-
 import com.springboot.springboot.dao.model.User;
 import com.springboot.springboot.dto.ListPagesDTO;
 import com.springboot.springboot.dto.ResponseDTO;
@@ -45,4 +43,5 @@ public interface UserService {
 
 	ResponseDTO<String> deleteUser(SessionDTO session, String id, String newId);
 
+	ResponseDTO<String> postUserImage(String imgUri);
 }
