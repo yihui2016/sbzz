@@ -29,7 +29,7 @@ public class UserDtoHelper {
 		model.setTarget(dto.getTarget());
 		model.setPid(dto.getPid());
 		model.setSex(dto.getSex());
-		model.setNo(model.getNo());
+		model.setNo(dto.getNo());
 		return model;
 	}
 
