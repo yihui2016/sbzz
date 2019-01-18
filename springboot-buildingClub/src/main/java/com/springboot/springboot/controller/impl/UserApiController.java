@@ -5,6 +5,8 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.NotNull;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,16 +28,20 @@ import com.springboot.springboot.dto.UserInfoDTO;
 import com.springboot.springboot.dto.UserLoginDTO;
 import com.springboot.springboot.security.UserSession;
 import com.springboot.springboot.service.UserService;
+import com.springboot.springboot.service.impl.UserServiceImpl;
 import com.springboot.springboot.util.CommonUtil;
 
 @RestController
 @EnableScheduling
 public class UserApiController implements UserApi {
+	private static final Logger logger = LoggerFactory.getLogger(UserApiController.class);
+
 	@Autowired
 	UserService userService;
 
 	@RequestMapping("/hello")
 	public String helloWorld() {
+		logger.info("spring boot helloWorld");
 		return "spring boot helloWorld";
 	}
 
