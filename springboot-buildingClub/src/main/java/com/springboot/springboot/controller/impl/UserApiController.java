@@ -118,8 +118,8 @@ public class UserApiController implements UserApi {
 	@Override
 	public ResponseEntity<Object> uUserIdPut(@NotNull @RequestParam(value = "token", required = true) String token,
 			@PathVariable("id") String id, @RequestBody UserInfoDTO data, @UserSession SessionDTO session) {
-		if (CommonUtil.isNullOrEmpty(id) || data == null || !AuthorityValue.ROLE5.equals(session.getRole())
-				|| !AuthorityValue.ROLE7.equals(session.getRole()) || !AuthorityValue.ROLE9.equals(session.getRole())) {
+		if (CommonUtil.isNullOrEmpty(id) || data == null || (!AuthorityValue.ROLE5.equals(session.getRole())
+				&& !AuthorityValue.ROLE7.equals(session.getRole()) && !AuthorityValue.ROLE9.equals(session.getRole()))) {
 			return new ResponseEntity<Object>(new ResponseDTO<>(ErrorCodeEnum.PARAMETER_WRONG), HttpStatus.OK);
 		}
 

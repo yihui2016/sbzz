@@ -219,13 +219,13 @@
 				#{extraInfo,jdbcType=VARCHAR}),
 			</if>
 			<if test="deleteFlag != null">
-				#{deleteFlag,jdbcType=TINYINT}
+				#{deleteFlag,jdbcType=TINYINT},
 			</if>
 			<if test="sex != null">
-				#{sex,jdbcType=VARCHAR}
+				#{sex,jdbcType=VARCHAR},
 			</if>
 			<if test="no != null">
-				#{no,jdbcType=INTEGER}
+				#{no,jdbcType=INTEGER},
 			</if>
 		</trim>
 	</insert>
