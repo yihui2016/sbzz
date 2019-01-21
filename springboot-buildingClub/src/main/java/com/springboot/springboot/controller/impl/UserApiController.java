@@ -28,7 +28,6 @@ import com.springboot.springboot.dto.UserInfoDTO;
 import com.springboot.springboot.dto.UserLoginDTO;
 import com.springboot.springboot.security.UserSession;
 import com.springboot.springboot.service.UserService;
-import com.springboot.springboot.service.impl.UserServiceImpl;
 import com.springboot.springboot.util.CommonUtil;
 
 @RestController
@@ -95,17 +94,17 @@ public class UserApiController implements UserApi {
 	public ResponseEntity<Object> uUsersGet(@NotNull @RequestParam(value = "token", required = true) String token,
 			@RequestParam(value = "offset", required = false) Integer offset,
 			@RequestParam(value = "limit", required = false) Integer limit, @UserSession SessionDTO session) {
-		if(offset == null || limit == null){
+		if (offset == null || limit == null) {
 			offset = 0;
-			limit =6;
+			limit = 6;
 		}
-		if(AuthorityValue.ROLE5.equals(session.getRole())){
+		if (AuthorityValue.ROLE5.equals(session.getRole())) {
 			ListPagesDTO<UserInfoDTO> r = userService.listUsersByPid(session, offset, limit);
 			return new ResponseEntity<Object>(r, HttpStatus.OK);
-		}else if (AuthorityValue.ROLE7.equals(session.getRole()) || AuthorityValue.ROLE9.equals(session.getRole())){
+		} else if (AuthorityValue.ROLE7.equals(session.getRole()) || AuthorityValue.ROLE9.equals(session.getRole())) {
 			ListPagesDTO<UserInfoDTO> r = userService.listUsers(session, offset, limit);
 			return new ResponseEntity<Object>(r, HttpStatus.OK);
-		}else {
+		} else {
 			return new ResponseEntity<Object>(new ResponseDTO<>(ErrorCodeEnum.NO_ROLE), HttpStatus.OK);
 		}
 	}
@@ -113,7 +112,7 @@ public class UserApiController implements UserApi {
 	@Override
 	public ResponseEntity<Object> uUserIdGet(@NotNull @RequestParam(value = "token", required = true) String token,
 			@PathVariable("id") String id, @UserSession SessionDTO session) {
-		if (CommonUtil.isNullOrEmpty(id)){
+		if (CommonUtil.isNullOrEmpty(id)) {
 			return new ResponseEntity<Object>(new ResponseDTO<>(ErrorCodeEnum.PARAMETER_WRONG), HttpStatus.OK);
 		}
 
@@ -124,8 +123,9 @@ public class UserApiController implements UserApi {
 	@Override
 	public ResponseEntity<Object> uUserIdPut(@NotNull @RequestParam(value = "token", required = true) String token,
 			@PathVariable("id") String id, @RequestBody UserInfoDTO data, @UserSession SessionDTO session) {
-		if (CommonUtil.isNullOrEmpty(id) || data == null || (!AuthorityValue.ROLE5.equals(session.getRole())
-				&& !AuthorityValue.ROLE7.equals(session.getRole()) && !AuthorityValue.ROLE9.equals(session.getRole()))) {
+		if (CommonUtil.isNullOrEmpty(id) || data == null
+				|| (!AuthorityValue.ROLE5.equals(session.getRole()) && !AuthorityValue.ROLE7.equals(session.getRole())
+						&& !AuthorityValue.ROLE9.equals(session.getRole()))) {
 			return new ResponseEntity<Object>(new ResponseDTO<>(ErrorCodeEnum.PARAMETER_WRONG), HttpStatus.OK);
 		}
 
@@ -150,14 +150,15 @@ public class UserApiController implements UserApi {
 		}
 
 		UserInfoDTO user = userService.getById(id, session).getData();
-		if (user == null || !AuthorityValue.ROLE5.equals(user.getRole()) || !AuthorityValue.ROLE1.equals(user.getRole())) {
+		if (user == null || !AuthorityValue.ROLE5.equals(user.getRole())
+				|| !AuthorityValue.ROLE1.equals(user.getRole())) {
 			return new ResponseEntity<Object>(new ResponseDTO<>(ErrorCodeEnum.NOT_FOUND), HttpStatus.OK);
 		}
-		
+
 		if (AuthorityValue.ROLE5.equals(user.getRole()) && (CommonUtil.isNullOrEmpty(newId) || id.equals(newId))) {
 			return new ResponseEntity<Object>(new ResponseDTO<>(ErrorCodeEnum.PARAMETER_WRONG), HttpStatus.OK);
 		}
-		
+
 		UserInfoDTO toUser = userService.getById(newId, session).getData();
 		if (toUser == null || !AuthorityValue.ROLE5.equals(toUser.getRole())) {
 			return new ResponseEntity<Object>(new ResponseDTO<>(ErrorCodeEnum.NOT_FOUND), HttpStatus.OK);

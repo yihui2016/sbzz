@@ -41,6 +41,8 @@ public class UserServiceImpl implements UserService {
 	SessionBiz sessionBiz;
 	@Autowired
 	UserDtoHelper helper;
+	@Autowired
+	ImageBiz imageBiz;
 
 	@Override
 	public List<User> listUsers() {
@@ -75,10 +77,10 @@ public class UserServiceImpl implements UserService {
 		model.setPid(session.getUserId());
 		model.setCreationTime(System.currentTimeMillis());
 		model.setDeleteFlag(false);
-		
-		String imguri = postUserImage(data.getImgUri()).getData();
+
+		String imguri = imageBiz.postUserImage(data.getImgUri()).getData();
 		model.setImguri(imguri);
-		
+
 		userMapper.insertSelective(model);
 
 		addBodyParam(data, id, session);
@@ -136,23 +138,24 @@ public class UserServiceImpl implements UserService {
 		if (user == null) {
 			return new ResponseDTO<>(ErrorCodeEnum.NOT_FOUND);
 		}
-		
-		if(!CommonUtil.isNullOrEmpty(data.getPhone())){
+
+		if (!CommonUtil.isNullOrEmpty(data.getPhone())) {
 			user = new User();
 			user.setId(id);
 			user.setPhone(data.getPhone());
 			userMapper.updateByPrimaryKeySelective(user);
 		}
-		
+
 		addBodyParam(data, id, session);
 		return new ResponseDTO<>(id);
 	}
 
 	private void addBodyParam(UserInfoDTO data, String id, SessionDTO session) {
 		List<BodyParamDTO> bodyParams = data.getBodyParams();
-		if(bodyParams == null || bodyParams.isEmpty()) {
+		if (bodyParams == null || bodyParams.isEmpty()) {
 			return;
 		}
+		logger.info("addBodyParam bodyParams size " + bodyParams.size());
 		for (BodyParamDTO dto : bodyParams) {
 			BodyParam bodyParam = helper.toBodyParamModel(dto);
 			if (CommonUtil.isNullOrEmpty(dto.getId())) {
@@ -160,10 +163,10 @@ public class UserServiceImpl implements UserService {
 				bodyParam.setCreationTime(System.currentTimeMillis());
 				bodyParam.setCreatorId(session.getUserId());
 				bodyParam.setUserId(id);
-				
-				String imguri = postUserImage(bodyParam.getImguri()).getData();
+
+				String imguri = imageBiz.postUserImage(bodyParam.getImguri()).getData();
 				bodyParam.setImguri(imguri);
-				
+
 				// 测量参数只能添加新的
 				bodyParamMapper.insert(bodyParam);
 			}
@@ -197,35 +200,8 @@ public class UserServiceImpl implements UserService {
 		return new ResponseDTO<>(newId);
 	}
 
-	private static final Base64.Decoder decoder = Base64.getDecoder();
-	private static final String PATH = "C:\\SportAPI\\SportAPI\\img\\";
-
 	@Override
 	public ResponseDTO<String> postUserImage(String imgUri) {
-		if(CommonUtil.isNullOrEmpty(imgUri) || !imgUri.contains("data:image")){
-			return new ResponseDTO<>(ErrorCodeEnum.PARAMETER_WRONG);
-		}
-		
-		String suffix = imgUri.substring(imgUri.indexOf("/") + 1, imgUri.indexOf(";"));
-		String imgFilePath = System.currentTimeMillis() + "." + suffix;
-		imgUri = imgUri.substring(imgUri.indexOf(",") + 1);
-		try {
-			byte[] bytes = decoder.decode(imgUri);
-			for (int i = 0; i < bytes.length; ++i) {
-				if (bytes[i] < 0) {// 调整异常数据
-					bytes[i] += 256;
-				}
-			}
-			// 生成jpeg图片
-			OutputStream out = new FileOutputStream(PATH + imgFilePath);
-			out.write(bytes);
-			out.flush();
-			out.close();
-			return new ResponseDTO<>(imgFilePath);
-		} catch (Exception e) {
-			System.out.println(e);
-			return new ResponseDTO<>(ErrorCodeEnum.ERROR);
-		}
+		return imageBiz.postUserImage(imgUri);
 	}
-
 }

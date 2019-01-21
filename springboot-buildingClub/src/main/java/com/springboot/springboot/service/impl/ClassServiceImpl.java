@@ -15,14 +15,12 @@ import com.springboot.springboot.dao.mapper.ClassRecordDetailMapper;
 import com.springboot.springboot.dao.mapper.ClassRecordMapper;
 import com.springboot.springboot.dao.model.ClassRecord;
 import com.springboot.springboot.dao.model.ClassRecordDetail;
-import com.springboot.springboot.dao.model.User;
 import com.springboot.springboot.dto.ClassRecordDTO;
 import com.springboot.springboot.dto.ClassRecordDetailDTO;
 import com.springboot.springboot.dto.ClassRecordWithDetailDTO;
 import com.springboot.springboot.dto.ListPagesDTO;
 import com.springboot.springboot.dto.ResponseDTO;
 import com.springboot.springboot.dto.SessionDTO;
-import com.springboot.springboot.dto.UserInfoDTO;
 import com.springboot.springboot.dto.helper.ClassDtoHelper;
 import com.springboot.springboot.service.ClassService;
 import com.springboot.springboot.util.CommonUtil;
@@ -37,6 +35,8 @@ public class ClassServiceImpl implements ClassService {
 	ClassRecordDetailMapper classRecordDetailMapper;
 	@Autowired
 	ClassDtoHelper helper;
+	@Autowired
+	ImageBiz imageBiz;
 
 	@Override
 	public ResponseDTO<String> createClass(String userId, ClassRecordWithDetailDTO data, SessionDTO session) {
@@ -108,19 +108,27 @@ public class ClassServiceImpl implements ClassService {
 
 		ClassRecord newValRecord = helper.toModel(data);
 
+		String coachCheck = imageBiz.postUserImage(data.getCoachCheck()).getData();
+		newValRecord.setCoachCheck(coachCheck);
+
+		String userCheck = imageBiz.postUserImage(data.getUserCheck()).getData();
+		newValRecord.setUserCheck(userCheck);
+
 		try {
 			oldValRecord.updateWithNewValue(newValRecord);
 		} catch (Exception e) {
 			logger.error("updateClass  updateWithNewValue", e);
 		}
 		oldValRecord.setDeleteFlag(null);
-		classRecordMapper.updateByPrimaryKey(oldValRecord);
+		classRecordMapper.updateByPrimaryKeySelective(oldValRecord);
 
 		// 具体条目
 		List<ClassRecordDetailDTO> details = data.getDetails();
 		if (details == null || details.isEmpty()) {
 			return new ResponseDTO<>(id);
 		}
+		logger.info("updateClass  details size" + details.size());
+
 		List<String> remaindetailIds = new ArrayList<>();
 		for (ClassRecordDetailDTO dto : details) {
 			ClassRecordDetail detail = helper.toDetailModel(dto);
@@ -130,7 +138,6 @@ public class ClassServiceImpl implements ClassService {
 				detail.setId(CommonUtil.getGenerateUUID());
 				classRecordDetailMapper.insert(detail);
 			} else {
-				remaindetailIds.add(detail.getId());
 
 				ClassRecordDetail oldDetailVal = classRecordDetailMapper.selectByPrimaryKey(detail.getId());
 				try {
@@ -138,8 +145,9 @@ public class ClassServiceImpl implements ClassService {
 				} catch (Exception e) {
 					logger.error("updateClass  updateWithNewValue", e);
 				}
-				classRecordDetailMapper.updateByPrimaryKey(oldDetailVal);
+				classRecordDetailMapper.updateByPrimaryKeySelective(oldDetailVal);
 			}
+			remaindetailIds.add(detail.getId());
 		}
 
 		// 修改所有没有提到的详情为删除

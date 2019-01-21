@@ -37,19 +37,22 @@
 		from class_record_detail where id = #{id,jdbcType=VARCHAR} </delete> -->
 
 	<update id="deleteByPrimaryKey" parameterType="java.lang.String">
-		update class_record_detail
-		<set>
-			delete_flag = true
-		</set>
-		where class_record_id = #{recordId,jdbcType=VARCHAR} and id not in #{ids}
-	</update>
-	
-	<update id="deleteByRecordIdAndIdsNotIn">
         update class_record_detail
         <set>
             delete_flag = true
         </set>
         where id = #{id,jdbcType=VARCHAR}
+	</update>
+	
+	<update id="deleteByRecordIdAndIdsNotIn">
+        update class_record_detail
+		<set>
+			delete_flag = true
+		</set>
+		where class_record_id = #{recordId,jdbcType=VARCHAR} and id not in 
+		<foreach collection="ids" index="index" item="id" open="(" separator="," close=")">
+               #{id}       
+        </foreach>    
     </update>
 
 	<insert id="insert"
@@ -65,9 +68,9 @@
 		#{strength,jdbcType=VARCHAR},
 		#{times,jdbcType=VARCHAR},
 		#{round,jdbcType=VARCHAR},
-		#{extraInfo,jdbcType=VARCHAR}),
-		#{deleteFlag,jdbcType=TINYINT})
-
+		#{extraInfo,jdbcType=VARCHAR},
+		#{deleteFlag,jdbcType=TINYINT}
+		)
 	</insert>
 	<insert id="insertSelective"
 		parameterType="com.springboot.springboot.dao.model.ClassRecordDetail">
@@ -149,7 +152,7 @@
 				extra_info = #{extraInfo,jdbcType=VARCHAR},
 			</if>
 			<if test="deleteFlag != null">
-				delete_flag = #{deleteFlag,jdbcType=TINYINT}),
+				delete_flag = #{deleteFlag,jdbcType=TINYINT},
 			</if>
 		</set>
 		where id = #{id,jdbcType=VARCHAR}
@@ -165,7 +168,7 @@
 		#{times,jdbcType=VARCHAR},
 		round = #{round,jdbcType=VARCHAR},
 		extra_info = #{extraInfo,jdbcType=VARCHAR},
-		delete_flag = #{deleteFlag,jdbcType=TINYINT}),
+		delete_flag = #{deleteFlag,jdbcType=TINYINT}
 
 		where id =
 		#{id,jdbcType=VARCHAR}
