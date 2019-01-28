@@ -23,14 +23,16 @@ public interface UserMapper {
 
 	User selectByPhone(String phone);
 
-	List<User> selectByPid(@Param("pid") String pid, @Param("offset") Integer offset, @Param("limit") Integer limit);
+	List<User> selectByPid(@Param("pid") String pid, @Param("name") String name, @Param("offset") Integer offset,
+			@Param("limit") Integer limit);
 
-	List<User> selectAllByPid(@Param("pid") String pid);
+	List<User> selectAllByPid(@Param("pid") String pid, @Param("name") String name);
 
-	long countByPid(@Param("pid") String pid);
+	long countByPid(@Param("pid") String pid, @Param("name") String name);
 
-	List<User> selectAll(@Param("offset") Integer offset, @Param("limit") Integer limit);
+	List<User> selectAll(@Param("pid") String pid, @Param("role") String role, @Param("name") String name,
+			@Param("offset") Integer offset, @Param("limit") Integer limit);
 
-	long countAll();
+	long countAll(@Param("pid") String pid, @Param("role") String role, @Param("name") String name);
 
 }

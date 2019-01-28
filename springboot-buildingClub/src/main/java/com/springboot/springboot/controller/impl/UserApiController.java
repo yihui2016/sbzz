@@ -22,6 +22,7 @@ import com.springboot.springboot.constant.ErrorCodeEnum;
 import com.springboot.springboot.controller.UserApi;
 import com.springboot.springboot.dao.model.User;
 import com.springboot.springboot.dto.ListPagesDTO;
+import com.springboot.springboot.dto.ResourceNavDTO;
 import com.springboot.springboot.dto.ResponseDTO;
 import com.springboot.springboot.dto.SessionDTO;
 import com.springboot.springboot.dto.UserInfoDTO;
@@ -93,16 +94,17 @@ public class UserApiController implements UserApi {
 	@Override
 	public ResponseEntity<Object> uUsersGet(@NotNull @RequestParam(value = "token", required = true) String token,
 			@RequestParam(value = "offset", required = false) Integer offset,
-			@RequestParam(value = "limit", required = false) Integer limit, @UserSession SessionDTO session) {
+			@RequestParam(value = "limit", required = false) Integer limit,
+			@RequestParam(value = "name", required = false) String name, @UserSession SessionDTO session) {
 		if (offset == null || limit == null) {
 			offset = 0;
 			limit = 6;
 		}
 		if (AuthorityValue.ROLE5.equals(session.getRole())) {
-			ListPagesDTO<UserInfoDTO> r = userService.listUsersByPid(session, offset, limit);
+			ListPagesDTO<UserInfoDTO> r = userService.listUsersByPid(session, name, offset, limit);
 			return new ResponseEntity<Object>(r, HttpStatus.OK);
 		} else if (AuthorityValue.ROLE7.equals(session.getRole()) || AuthorityValue.ROLE9.equals(session.getRole())) {
-			ListPagesDTO<UserInfoDTO> r = userService.listUsers(session, offset, limit);
+			ListPagesDTO<UserInfoDTO> r = userService.listUsers(session, name, offset, limit);
 			return new ResponseEntity<Object>(r, HttpStatus.OK);
 		} else {
 			return new ResponseEntity<Object>(new ResponseDTO<>(ErrorCodeEnum.NO_ROLE), HttpStatus.OK);
@@ -174,6 +176,27 @@ public class UserApiController implements UserApi {
 			return new ResponseEntity<Object>(new ResponseDTO<>(ErrorCodeEnum.PARAMETER_WRONG), HttpStatus.OK);
 		}
 		ResponseDTO<String> r = userService.postUserImage(data.getImgUri());
+		return new ResponseEntity<Object>(r, HttpStatus.OK);
+	}
+
+	@Override
+	public ResponseEntity<Object> uUsersLogoutPost(
+			@NotNull @RequestParam(value = "token", required = true) String token, @UserSession SessionDTO session) {
+		ResponseDTO<SessionDTO> r = userService.userLogout(session);
+		return new ResponseEntity<Object>(r, HttpStatus.OK);
+	}
+
+	@Override
+	public ResponseEntity<Object> uUsersLogs(@NotNull @RequestParam(value = "token", required = true) String token,
+			@RequestParam(value = "offset", required = false) Integer offset,
+			@RequestParam(value = "limit", required = false) Integer limit,
+			@RequestParam(value = "startTime", required = false) Long startTime,
+			@RequestParam(value = "endTime", required = false) Long endTime,
+			@RequestParam(value = "name", required = false) String name, @UserSession SessionDTO session) {
+		if (!AuthorityValue.ROLE9.equals(session.getRole()) && !AuthorityValue.ROLE7.equals(session.getRole())) {
+			return new ResponseEntity<Object>(new ResponseDTO<>(ErrorCodeEnum.NO_ROLE), HttpStatus.OK);
+		}
+		ListPagesDTO<ResourceNavDTO> r = userService.listUserLogs(session, offset, limit, startTime, endTime, name);
 		return new ResponseEntity<Object>(r, HttpStatus.OK);
 	}
 }

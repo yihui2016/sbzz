@@ -29,7 +29,8 @@ public interface UserApi {
 	@RequestMapping(value = "/u/users", produces = { "application/json" }, method = RequestMethod.GET)
 	ResponseEntity<Object> uUsersGet(@NotNull @RequestParam(value = "token", required = true) String token,
 			@RequestParam(value = "offset", required = false) Integer offset,
-			@RequestParam(value = "limit", required = false) Integer limit, @UserSession SessionDTO session);
+			@RequestParam(value = "limit", required = false) Integer limit,
+			@RequestParam(value = "name", required = false) String name, @UserSession SessionDTO session);
 
 	// 获取详情
 	@RequestMapping(value = "/u/user/{id}", produces = { "application/json" }, method = RequestMethod.GET)
@@ -49,4 +50,19 @@ public interface UserApi {
 	// 图片上传
 	@RequestMapping(value = "/u/users/image", produces = { "application/json" }, method = RequestMethod.POST)
 	ResponseEntity<Object> uUsersImagePost(@RequestBody UserInfoDTO data, HttpServletRequest request);
+
+	// 登出
+	@RequestMapping(value = "/u/users/logout", produces = { "application/json" }, method = RequestMethod.POST)
+	ResponseEntity<Object> uUsersLogoutPost(@NotNull @RequestParam(value = "token", required = true) String token,
+			@UserSession SessionDTO session);
+
+	// 登出/登录记录
+	@RequestMapping(value = "/u/users/logs", produces = { "application/json" }, method = RequestMethod.GET)
+	ResponseEntity<Object> uUsersLogs(@NotNull @RequestParam(value = "token", required = true) String token,
+			@RequestParam(value = "offset", required = false) Integer offset,
+			@RequestParam(value = "limit", required = false) Integer limit,
+			@RequestParam(value = "startTime", required = false) Long startTime,
+			@RequestParam(value = "endTime", required = false) Long endTime,
+			@RequestParam(value = "name", required = false) String name, @UserSession SessionDTO session);
+
 }

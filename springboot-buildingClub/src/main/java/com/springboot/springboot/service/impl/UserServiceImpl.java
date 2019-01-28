@@ -1,8 +1,5 @@
 package com.springboot.springboot.service.impl;
 
-import java.io.FileOutputStream;
-import java.io.OutputStream;
-import java.util.Base64;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -15,11 +12,14 @@ import org.springframework.stereotype.Service;
 
 import com.springboot.springboot.constant.ErrorCodeEnum;
 import com.springboot.springboot.dao.mapper.BodyParamMapper;
+import com.springboot.springboot.dao.mapper.UserLogMapper;
 import com.springboot.springboot.dao.mapper.UserMapper;
 import com.springboot.springboot.dao.model.BodyParam;
 import com.springboot.springboot.dao.model.User;
+import com.springboot.springboot.dao.model.UserLog;
 import com.springboot.springboot.dto.BodyParamDTO;
 import com.springboot.springboot.dto.ListPagesDTO;
+import com.springboot.springboot.dto.ResourceNavDTO;
 import com.springboot.springboot.dto.ResponseDTO;
 import com.springboot.springboot.dto.SessionDTO;
 import com.springboot.springboot.dto.UserInfoDTO;
@@ -35,6 +35,8 @@ public class UserServiceImpl implements UserService {
 
 	@Resource
 	UserMapper userMapper;
+	@Resource
+	UserLogMapper userLogMapper;
 	@Resource
 	BodyParamMapper bodyParamMapper;
 	@Autowired
@@ -66,6 +68,9 @@ public class UserServiceImpl implements UserService {
 		String token = CommonUtil.getGenerateUUID();
 		logger.info("userLogin token" + token);
 		SessionDTO buildSession = sessionBiz.buildSession(token, user, 0L);
+
+		addLogRecord(buildSession, UserLog.CATEGORY_LOGIN);
+
 		return new ResponseDTO<>(buildSession);
 	}
 
@@ -113,9 +118,9 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public ListPagesDTO<UserInfoDTO> listUsersByPid(SessionDTO session, Integer offset, Integer limit) {
-		List<User> users = userMapper.selectByPid(session.getUserId(), offset, limit);
-		long count = userMapper.countByPid(session.getUserId());
+	public ListPagesDTO<UserInfoDTO> listUsersByPid(SessionDTO session, String name, Integer offset, Integer limit) {
+		List<User> users = userMapper.selectByPid(session.getUserId(), name, offset, limit);
+		long count = userMapper.countByPid(session.getUserId(), name);
 
 		List<UserInfoDTO> data = helper.toDtos(users);
 		ListPagesDTO<UserInfoDTO> r = new ListPagesDTO<>(data, count, offset, limit);
@@ -123,9 +128,9 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public ListPagesDTO<UserInfoDTO> listUsers(SessionDTO session, Integer offset, Integer limit) {
-		List<User> users = userMapper.selectAll(offset, limit);
-		long count = userMapper.countAll();
+	public ListPagesDTO<UserInfoDTO> listUsers(SessionDTO session, String name, Integer offset, Integer limit) {
+		List<User> users = userMapper.selectAll(null, null, name, offset, limit);
+		long count = userMapper.countAll(null, null, name);
 
 		List<UserInfoDTO> data = helper.toDtos(users);
 		ListPagesDTO<UserInfoDTO> r = new ListPagesDTO<>(data, count, offset, limit);
@@ -177,7 +182,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public ResponseDTO<String> deleteUser(SessionDTO session, String id, String newId) {
 		userMapper.deleteByPrimaryKey(id);
-		List<User> selectAllByPid = userMapper.selectAllByPid(id);
+		List<User> selectAllByPid = userMapper.selectAllByPid(id, null);
 		for (User user : selectAllByPid) {
 			User record = new User();
 			StringBuilder sb = new StringBuilder();
@@ -203,5 +208,29 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public ResponseDTO<String> postUserImage(String imgUri) {
 		return imageBiz.postUserImage(imgUri);
+	}
+
+	@Override
+	public ResponseDTO<SessionDTO> userLogout(SessionDTO session) {
+		addLogRecord(session, UserLog.CATEGORY_LOGOUT);
+
+		sessionBiz.removeByToken(session.getToken());
+		return new ResponseDTO<>();
+	}
+
+	private void addLogRecord(SessionDTO session, String category) {
+		UserLog record = new UserLog();
+		record.setId(CommonUtil.getGenerateUUID());
+		record.setCreationTime(System.currentTimeMillis());
+		record.setUserId(session.getUserId());
+		record.setCategory(category);
+		userLogMapper.insert(record);
+	}
+
+	@Override
+	public ListPagesDTO<ResourceNavDTO> listUserLogs(SessionDTO session, Integer offset, Integer limit, Long startTime,
+			Long endTime, String name) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

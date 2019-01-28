@@ -110,3 +110,21 @@ SET FOREIGN_KEY_CHECKS = 1;
 
 
 INSERT INTO `buildingclub`.`user` (`id`, `creation_time`, `name`, `age`, `job`, `target`, `height`, `password`, `phone`, `role`, `pid`, `imgUri`, `delete_flag`) VALUES ('1', '1', 'admin', '1', '1', '1', '1', 'e10adc3949ba59abbe56e057f20f883e', '9', '1', '1', '1', false);
+
+
+
+
+-- ----------------------------
+-- Table structure for user_log
+-- ----------------------------
+DROP TABLE IF EXISTS `user_log`;
+CREATE TABLE `user_log`  (
+  `id` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `creation_time` bigint(16) NOT NULL,
+  `user_id` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `category` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `ip` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+

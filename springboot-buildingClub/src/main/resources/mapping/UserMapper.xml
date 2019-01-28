@@ -52,25 +52,45 @@
 		select
 		<include refid="Base_Column_List" />
 		from user
-		where pid = #{pid,jdbcType=VARCHAR} and delete_flag = false
-		order by creation_time desc 
-		limit #{offset,jdbcType=INTEGER}, #{limit,jdbcType=INTEGER}
+		where delete_flag = false
+		<if test="pid != null">
+			and pid = #{pid,jdbcType=VARCHAR}
+		</if>
+
+		<if test="name != null">
+			and name = #{name,jdbcType=VARCHAR}
+		</if>
+
+		order by creation_time desc
+		limit #{offset,jdbcType=INTEGER},
+		#{limit,jdbcType=INTEGER}
 	</select>
 
 	<select id="selectAllByPid" resultMap="BaseResultMap">
 		select
 		<include refid="Base_Column_List" />
 		from user
-		where pid = #{pid,jdbcType=VARCHAR} and delete_flag = false
-		order by creation_time desc 
+		where delete_flag = false
+		<if test="pid != null">
+			and pid = #{pid,jdbcType=VARCHAR}
+		</if>
+		<if test="name != null">
+			and name = #{name,jdbcType=VARCHAR}
+		</if>
+		order by creation_time desc
 	</select>
 
 	<select id="countByPid" resultType="Long">
 		select
 		count(1)
 		from user
-		where
-		pid = #{pid,jdbcType=VARCHAR} and delete_flag = false
+		where delete_flag = false
+		<if test="pid != null">
+			and pid = #{pid,jdbcType=VARCHAR}
+		</if>
+		<if test="name != null">
+			and name = #{name,jdbcType=VARCHAR}
+		</if>
 	</select>
 
 	<select id="selectAll" resultMap="BaseResultMap">
@@ -78,8 +98,22 @@
 		<include refid="Base_Column_List" />
 		from user
 		where role != 9
-		order by creation_time desc 
-		limit #{offset,jdbcType=INTEGER},
+
+		<if test="pid != null">
+			and pid = #{pid,jdbcType=VARCHAR}
+		</if>
+
+		<if test="role != null">
+			and role = #{role,jdbcType=VARCHAR}
+		</if>
+
+		<if test="name != null">
+			and name = #{name,jdbcType=VARCHAR}
+		</if>
+
+		order by creation_time desc
+		limit
+		#{offset,jdbcType=INTEGER},
 		#{limit,jdbcType=INTEGER}
 	</select>
 
@@ -88,7 +122,16 @@
 		count(1)
 		from user
 		where
-		role != 9;
+		role != 9
+		<if test="pid != null">
+			and pid = #{pid,jdbcType=VARCHAR}
+		</if>
+		<if test="role != null">
+			and role = #{role,jdbcType=VARCHAR}
+		</if>
+		<if test="name != null">
+			and name = #{name,jdbcType=VARCHAR}
+		</if>
 	</select>
 
 	<!-- <delete id="deleteByPrimaryKey" parameterType="java.lang.String"> delete 
@@ -296,7 +339,8 @@
 		= #{pid,jdbcType=VARCHAR},
 		imgUri = #{imguri,jdbcType=VARCHAR},
 		extra_info = #{extraInfo,jdbcType=VARCHAR},
-		sex = #{sex,jdbcType=VARCHAR}
+		sex =
+		#{sex,jdbcType=VARCHAR}
 		, no = #{no,jdbcType=INTEGER}
 
 		where id

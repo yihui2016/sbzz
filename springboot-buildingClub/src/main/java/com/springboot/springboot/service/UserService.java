@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.springboot.springboot.dao.model.User;
 import com.springboot.springboot.dto.ListPagesDTO;
+import com.springboot.springboot.dto.ResourceNavDTO;
 import com.springboot.springboot.dto.ResponseDTO;
 import com.springboot.springboot.dto.SessionDTO;
 import com.springboot.springboot.dto.UserInfoDTO;
@@ -35,13 +36,19 @@ public interface UserService {
 	// 检查手机号是否创建过用户
 	ResponseDTO<UserInfoDTO> getById(String id, SessionDTO session);
 
-	ListPagesDTO<UserInfoDTO> listUsersByPid(SessionDTO session, Integer offset, Integer limit);
+	ListPagesDTO<UserInfoDTO> listUsersByPid(SessionDTO session, String name, Integer offset, Integer limit);
 
-	ListPagesDTO<UserInfoDTO> listUsers(SessionDTO session, Integer offset, Integer limit);
+	ListPagesDTO<UserInfoDTO> listUsers(SessionDTO session, String name, Integer offset, Integer limit);
 
 	ResponseDTO<String> updateUser(UserInfoDTO data, String id, SessionDTO session);
 
 	ResponseDTO<String> deleteUser(SessionDTO session, String id, String newId);
 
 	ResponseDTO<String> postUserImage(String imgUri);
+	
+    // 用户登录
+	ResponseDTO<SessionDTO> userLogout(SessionDTO session);
+	
+	ListPagesDTO<ResourceNavDTO> listUserLogs(SessionDTO session, Integer offset, Integer limit, Long startTime, Long endTime,String name);
+
 }
