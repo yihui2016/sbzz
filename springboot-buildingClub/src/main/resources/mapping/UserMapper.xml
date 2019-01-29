@@ -134,6 +134,17 @@
 		</if>
 	</select>
 
+	<select id="selectAllIdByNameLike" resultType="String">
+		select
+		id
+		from user
+		where delete_flag = false
+		and name like
+		CONCAT('%',#{name,jdbcType=VARCHAR},'%')
+		and role = 5
+		order by creation_time desc
+	</select>
+
 	<!-- <delete id="deleteByPrimaryKey" parameterType="java.lang.String"> delete 
 		from user where id = #{id,jdbcType=VARCHAR} </delete> -->
 

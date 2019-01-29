@@ -35,4 +35,6 @@ public interface UserMapper {
 
 	long countAll(@Param("pid") String pid, @Param("role") String role, @Param("name") String name);
 
+	List<String> selectAllIdByNameLike(@Param("name") String name);
+
 }

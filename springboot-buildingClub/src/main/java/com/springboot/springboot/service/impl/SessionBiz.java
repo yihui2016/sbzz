@@ -24,7 +24,7 @@ public class SessionBiz {
 		String jsonSession = JSON.toJSONString(user);
 		System.out.println("add token userId" + user.getUserId());
 		logger.info("addToken2Redis" + token);
-		redisTemplate.opsForValue().set(Constant.TOKEN + token, jsonSession, 1, TimeUnit.HOURS);
+		redisTemplate.opsForValue().set(Constant.TOKEN + token, jsonSession, 6, TimeUnit.HOURS);
 	}
 
 	public void removeByToken(String token) {
@@ -49,7 +49,7 @@ public class SessionBiz {
 			return session;
 		}
 		// 增加token过期时间?? 效果待观察
-		redisTemplate.opsForValue().set(Constant.TOKEN + token, jsonSession, 1, TimeUnit.HOURS);
+		redisTemplate.opsForValue().set(Constant.TOKEN + token, jsonSession, 6, TimeUnit.HOURS);
 
 		session = JSON.parseObject(jsonSession, SessionDTO.class);
 		return session;

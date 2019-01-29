@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.springboot.springboot.dao.mapper.UserLogMapper">
+	<resultMap id="BaseResultMap" type="com.springboot.springboot.dao.model.UserLog">
+		<id column="id" property="id" jdbcType="VARCHAR" />
+		<result column="creation_time" property="creationTime"
+			jdbcType="BIGINT" />
+		<result column="user_id" property="userId" jdbcType="VARCHAR" />
+		<result column="category" property="category" jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, creation_time, user_id,category
+	</sql>
+
+	<select id="listLogs" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from user_log where 1=1
+
+		<if test="startTime != null">
+			and creation_time &gt;= #{startTime,jdbcType=BIGINT}
+		</if>
+
+		<if test="endTime != null">
+			and creation_time &lt; #{endTime,jdbcType=BIGINT}
+		</if>
+
+		<if test="ids != null">
+			and user_id in
+			<foreach collection="ids" index="index" item="id" open="("
+				separator="," close=")">
+				#{id}
+			</foreach>
+		</if>
+
+		<if test="category != null">
+			and category = #{category,jdbcType=VARCHAR}
+		</if>
+
+		order by creation_time desc
+		limit #{offset,jdbcType=INTEGER},
+		#{limit,jdbcType=INTEGER}
+
+	</select>
+
+	<select id="countAll" resultType="Long">
+		select
+		count(1)
+		from user_log where 1=1
+
+		<if test="startTime != null">
+			and creation_time &gt;= #{startTime,jdbcType=BIGINT}
+		</if>
+
+		<if test="endTime != null">
+			and creation_time &lt; #{endTime,jdbcType=BIGINT}
+		</if>
+
+		<if test="ids != null">
+			and user_id in
+			<foreach collection="ids" index="index" item="id" open="("
+				separator="," close=")">
+				#{id}
+			</foreach>
+		</if>
+
+		<if test="category != null">
+			and category = #{category,jdbcType=VARCHAR}
+		</if>
+
+	</select>
+
+	<insert id="insert" parameterType="com.springboot.springboot.dao.model.UserLog">
+		insert into user (id,
+		creation_time, user_id,
+		category)
+		values
+		(#{id,jdbcType=VARCHAR},
+		#{creationTime,jdbcType=VARCHAR},
+		#{userId,jdbcType=VARCHAR},
+		#{category,jdbcType=VARCHAR})
+	</insert>
+</mapper>

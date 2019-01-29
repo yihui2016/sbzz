@@ -1,6 +1,9 @@
 package com.springboot.springboot.service.impl;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -230,7 +233,39 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public ListPagesDTO<ResourceNavDTO> listUserLogs(SessionDTO session, Integer offset, Integer limit, Long startTime,
 			Long endTime, String name) {
-		// TODO Auto-generated method stub
-		return null;
+
+		List<String> ids = null;
+		if (!CommonUtil.isNullOrEmpty(name)) {
+			ids = userMapper.selectAllIdByNameLike(name);
+			if (ids == null || ids.isEmpty()) {
+				return new ListPagesDTO<>();
+			}
+		}
+
+		List<UserLog> logs = userLogMapper.listLogs(ids, startTime, endTime, null, offset, limit);
+
+		long count = userLogMapper.countAll(ids, startTime, endTime, null, offset, limit);
+
+		List<ResourceNavDTO> data = new ArrayList<>();
+		if (logs != null && !logs.isEmpty()) {
+			Map<String, String> userNameMap = new HashMap<>();
+			for (UserLog log : logs) {
+				ResourceNavDTO dto = new ResourceNavDTO();
+
+				dto.setCreationTime(log.getCreationTime());
+				dto.setCategory(log.getCategory());
+
+				String display = userNameMap.get(log.getUserId());
+				if (CommonUtil.isNullOrEmpty(display)) {
+					User user = userMapper.selectByPrimaryKey(log.getUserId());
+					display = user.getName();
+					userNameMap.put(log.getUserId(), display);
+				}
+				dto.setDisplay(display);
+			}
+		}
+		ListPagesDTO<ResourceNavDTO> r = new ListPagesDTO<>(data, count, offset, limit);
+		return r;
 	}
+
 }
